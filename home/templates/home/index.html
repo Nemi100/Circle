@@ -2,5 +2,32 @@
 {% load static %}
 
 {% block content %}
-<h1 class="display-4 text-success">Success</h1>
+
+{% page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col"></div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+{% block content %}
+
+    <div class="jumbotron">
+        <h1 class="display-4 logo-font">Welcome to Circle!</h1>
+        <p class="lead">This is your one-stop destination for career growth and opportunities.</p>
+        <hr class="my-4">
+        <p>Explore our features and get started today.</p>
+        <div>
+            <h4>
+                <a href="#" class="btn btn-primary btn-lg py-3 text-uppercase"  >Learn more</a>
+
+            </h4>
+        </div>
+    </div>
+
+{% endblock %}
+
 {% endblock %}
