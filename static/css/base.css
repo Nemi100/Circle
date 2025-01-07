@@ -1,11 +1,29 @@
 html, body {
     height: 100%;
     margin: 0;
+}
 
+header .navbar-nav .nav-item .nav-link {
+    padding: 10px 15px;
+    font-weight: bold;
+    color: #333;
+}
+
+header .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+#topnav {
+    padding: 10px 0;
+}
+
+#delivery-banner {
+    margin-top: 10px;
 }
 
 body {
-    background: url('/media/home-img.jpg') no-repeat center center fixed;
+    background: url('/media/home_img.jpg') no-repeat center center fixed;
     background-size: cover;
     color: #555;
     font-family: 'Lato', sans-serif;
@@ -25,12 +43,9 @@ body {
     backdrop-filter: blur(10px);
 }
 
-
-
 .text-uppercase {
     text-transform: uppercase;
 }
-
 
 /* Icon Styles */
 .icon {
