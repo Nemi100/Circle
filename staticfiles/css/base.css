@@ -1,0 +1,121 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+header .navbar-nav .nav-item .nav-link {
+    padding: 10px 15px;
+    font-weight: bold;
+    color: #333;
+}
+
+header .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+#topnav {
+    padding: 10px 0;
+}
+
+#delivery-banner {
+    margin-top: 10px;
+}
+
+body {
+    color: #555;
+    font-family: 'Lato', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.jumbotron {
+    background: rgba(255, 255, 255, 0.8); 
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 80%;
+    max-width: 700px;
+    color: #fff;
+    backdrop-filter: blur(10px);
+}
+
+.text-uppercase {
+    text-transform: uppercase;
+}
+
+/* Icon Styles */
+.icon {
+    align-items: center;
+    display: inline-flex;
+    justify-content: center;
+    height: 1.5rem;
+    width: 1.5rem;
+}
+
+/* Logo Styles */
+.logo-font {
+    text-transform: uppercase;
+}
+
+.main-logo-link {
+    width: fit-content;
+}
+
+/* Button Styles */
+.shop-now-button,
+.btn-black {
+    background: black;
+    color: white;
+    min-width: 260px;
+}
+
+.shop-now-button:hover,
+.shop-now-button:active,
+.shop-now-button:focus,
+.btn-black:hover,
+.btn-black:active,
+.btn-black:focus {
+    background: #222;
+    color: white;
+}
+
+/* Text and Border Styles */
+.text-black {
+    color: #000 !important;
+}
+
+.border-black {
+    border: 1px solid black !important;
+}
+
+/* Media Queries */
+/* Slightly larger container on xl screens */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 80%;
+    }
+}
+
+/* fixed top navbar only on medium and up */
+@media (min-width: 992px) {
+    .fixed-top-desktop-only {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 1030;
+    }
+
+    .header-container {
+        padding-top: 164px;
+    }
+}
+
+/* Accessibility */
+.shop-now-button:focus,
+.btn-black:focus {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}

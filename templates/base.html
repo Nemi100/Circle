@@ -23,72 +23,87 @@
     {% endblock %}
 
 
-    <title>Circle</title>
+    <title>Circle {% block extra_title %}{% endblock %}</title>
   </head>
   <body>
-        <header class="container-fluid fixed-top">
-            <div id="topnav" class="row bg-white pt-lg-2 d-none d-lg-flex">
-                <div class="col-12 col-lg-4 my-auto py-1 py-lg-0 text-center text-lg-left">
-                    <a href="{% url 'home' %}" class="nav-link main-logo-link">
-                        <h2 class="logo-font text-black my-0"><strong>Circle</strong></h2>
-                    </a>
-                </div>
-                
-                <div class="col-12 col-lg-4 my-auto py-1 py-lg-0">
-                    <ul class="list-inline list-unstyled text-center text-lg-right my-0">
-                        <li class="list-inline-item dropdown">
-                            <a class="text-black nav-link" href="#" id="user-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <div class="text-center">
-                                    <div><i class="fas fa-user fa-lg"></i></div>
-                                    <p class="my-0">My Account</p>
-                                </div>
-                            </a>
-                            <div class="dropdown-menu border-0" aria-labelledby="user-options">
-                                {% if request.user.is_authenticated %}
-                                    {% if request.user.is_superuser %}
-                                        <a href="" class="dropdown-item">Site Management</a>
-                                    {% endif %}
-                                    <a href="" class="dropdown-item">My Profile</a>
-                                    <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
-                                {% else %}
-                                    <a href="#" class="dropdown-item">Register</a>
-                                    <a href="#" class="dropdown-item">Login</a>
-                                {% endif %}
-                            </div>
-                        </li>
-                        <li class="list-inline-item">
-                            <a class="{% if subscription_basket %}text-info font-weight-bold{% else %}text-black{% endif %} nav-link" href="#">
-                                <div class="text-center">
-                                    <div><i class="fas fa-folder-open fa-lg"></i></div>
-                                    <p class="my-0">
-                                        {% if subscription_basket %}
-                                            Subscription Basket
-                                        {% else %}
-                                            No Subscriptions
-                                        {% endif %}
-                                    </p>
-                                </div>
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </div>
+    <header class="container-fluid fixed-top">
+        <div id="topnav" class="row bg-white pt-lg-2">
+            <div class="col-12 col-lg-3 my-auto text-center text-lg-left">
+                <a href="{% url 'home' %}" class="nav-link main-logo-link">
+                    <h2 class="logo-font text-black my-0"><strong>Circle</strong></h2>
+                </a>
             </div>
-            <div class="row bg-white">
-                <nav class="navbar navbar-expand-lg navbar-light w-100">
+            <div class="col-12 col-lg-5 my-auto">
+                <nav class="navbar navbar-expand-lg navbar-light">
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    
+                    <div class="collapse navbar-collapse" id="main-nav">
+                        <ul class="navbar-nav mx-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'home' %}">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Services</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">About Us</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Contact</a>
+                            </li>
+                        </ul>
+                    </div>
                 </nav>
             </div>
-            <div id="delivery-banner" class="row text-center">
-                <div class="col bg-black text-white">
-                    <h4 class="logo-font my-1">Free Month Trial Period ${{ free_delivery_threshold }}!</h4>                
-                </div>            
+            <div class="col-12 col-lg-4 my-auto py-1 py-lg-0">
+                <ul class="list-inline list-unstyled text-center text-lg-right my-0">
+                    <li class="list-inline-item dropdown">
+                        <a class="text-black nav-link" href="#" id="user-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <div class="text-center">
+                                <div><i class="fas fa-user fa-lg"></i></div>
+                                <p class="my-0">My Account</p>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu border-0" aria-labelledby="user-options">
+                            {% if request.user.is_authenticated %}
+                                {% if request.user.is_superuser %}
+                                    <a href="" class="dropdown-item">Site Management</a>
+                                {% endif %}
+                                <a href="{% url 'account_signup' %}" class="dropdown-item">My Profile</a>
+                                <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
+                            {% else %}
+                                <a href="{% url 'account_signup' %}" class="dropdown-item">Register</a>
+                                <a href="{% url 'account_login' %}" class="dropdown-item">Login</a>
+                            {% endif %}
+                        </div>
+                    </li>
+                    <li class="list-inline-item">
+                        <a class="{% if basket_count %}text-info font-weight-bold{% else %}text-black{% endif %} nav-link" href="{% url 'subscriptions:view_basket' %}"> 
+                            <div class="text-center">
+                                <div><i class="fas fa-folder-open fa-lg"></i></div>
+                                <p class="my-0">
+                                    {% if basket_count %}
+                                        Subscription Basket ({{ basket_count }})
+                                    {% else %}
+                                        No Subscriptions
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </a>
+                    </li>
+                    
+                </ul>
             </div>
-        </header>
-
+        </div>
+        <div id="delivery-banner" class="row text-center">
+            <div class="col bg-black text-white">
+                <h4 class="logo-font my-1">Free Month Trial Period ${{ free_delivery_threshold }}!</h4>                
+            </div>            
+        </div>
+    </header>
+    
+    
 
     {% if messages %}
         <div class="message-container">
