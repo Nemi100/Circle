@@ -16,9 +16,15 @@
                     <div class="card-body">
                         <h1 class="card-title pricing-card-title">£{{ plan.price }}</h1>
                         <ul class="list-unstyled mt-3 mb-4">
-                            <li>{{ plan.name == 'Newsletter'|yesno:'Free Newsletter,Premium Content' }}</li>
+                            <li>
+                                {% if plan.name == 'Newsletter' %}
+                                    Free Newsletter
+                                {% else %}
+                                    Premium Content
+                                {% endif %}
+                            </li>
                         </ul>
-                        <form method="POST" action="{% url 'add_to_basket' %}">
+                        <form method="POST" action="{% url 'subscriptions:add_to_basket' %}">
                             {% csrf_token %}
                             <input type="hidden" name="plan_id" value="{{ plan.id }}">
                             <button type="submit" class="btn btn-lg btn-block btn-primary">Add to Basket</button>
