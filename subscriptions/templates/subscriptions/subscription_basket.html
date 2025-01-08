@@ -5,20 +5,36 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2>Your Subscription Basket</h2>
-    {% if basket_count > 0 %}
-        <ul>
-            {% for plan in plans %}
-                <li>{{ plan.name }} - £{{ plan.price }}</li>
-            {% endfor %}
-        </ul>
-        {% if user.is_authenticated %}
+    <div class="card bg-white p-3">
+        <h2>Your Subscription Basket</h2>
+        
+        {% if basket_count > 0 %}
+            <ul>
+                {% for plan in plans %}
+                    <li>
+                        {% if plan.name == 'Newsletter' %}
+                            Free Newsletter
+                        {% else %}
+                            Premium Content
+                        {% endif %}
+                         - £{{ plan.price }}
+                        <!-- Option to switch plan -->
+                        <form method="POST" action="{% url 'subscriptions:switch_plan' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="plan_id" value="{{ plan.id }}">
+                            <button type="submit" class="btn btn-sm btn-secondary">Switch Plan</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
             <a href="{% url 'subscriptions:subscribe' %}" class="btn btn-primary">Proceed to Subscribe</a>
+            {% if not user.is_authenticated %}
+                <p>Please <a href="{% url 'account_login' %}">log in</a> or <a href="{% url 'account_signup' %}">register</a> to complete your subscription.</p>
+            {% endif %}
         {% else %}
-            <p>Please <a href="{% url 'account_login' %}">log in</a> or <a href="{% url 'account_signup' %}">register</a> to complete your subscription.</p>
+            <p>No plans selected yet.</p>
+            <a href="{% url 'subscriptions:subscription_plans' %}" class="btn btn-primary">Subscribe to a Plan</a>
         {% endif %}
-    {% else %}
-        <p>No plans selected yet.</p>
-    {% endif %}
+    </div>
 </div>
 {% endblock %}
