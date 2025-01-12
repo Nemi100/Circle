@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Subscribe{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'subscriptions/css/subscriptions.css' %}">
+{% endblock %}
+
+{% block header %}
+<h1>Subscribe to Our Service</h1>
+{% endblock %}
+
+{% block content %}
+<div class="overlay"></div>
+<div class="container">
+    <p class="center-text">Welcome! Join our community and enjoy exclusive benefits. Please fill out the form below to start your 30-day free trial. We promise to keep your information secure and use it only to enhance your experience with us.</p>
+    <div class="form-container">
+        <form id="subscribe-form" method="post">
+            {% csrf_token %}
+            <fieldset>
+                <legend class="form-legend">Subscription Details</legend>
+                {{ subscription_form.email|as_crispy_field }}
+                {{ subscription_form.plan|as_crispy_field }}
+            </fieldset>
+            <fieldset>
+                <legend class="form-legend">Payment Information</legend>
+                <div id="card-element" class="form-group">
+                    <!-- A Stripe Element will be inserted here. -->
+                </div>
+                <div id="card-errors" role="alert" class="form-group">
+                    <!-- Display errors for card element here. -->
+                </div>
+            </fieldset>
+            <p>* All fields marked with an asterisk are required.</p>
+            <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+        <p class="center-text">If you have any questions or need assistance, feel free to contact our support team. We're here to help!</p>
+    </div>
+</div>
+{% endblock %}
