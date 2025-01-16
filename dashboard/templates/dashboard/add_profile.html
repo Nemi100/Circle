@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %} | Add Profile {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="overlay"></div>
+    <div class="container profile-overlay">
+        <h2 class="logo-font mb-4">Add Profile</h2>
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Add Freelancer Profile</h4>
+                <form method="post" action="">
+                    {% csrf_token %}
+                    {{ freelancer_form.as_p }}
+                    <button type="submit" name="freelancer" class="btn btn-success">Add Freelancer Profile</button>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <h4>Add Employer Profile</h4>
+                <form method="post" action="">
+                    {% csrf_token %}
+                    {{ employer_form.as_p }}
+                    <button type="submit" name="employer" class="btn btn-success">Add Employer Profile</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

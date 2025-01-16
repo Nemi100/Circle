@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %} | {{ profile.user.username }}'s Profile {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="overlay"></div>
+    <div class="container profile-overlay">
+        <div class="row">
+            <div class="col">
+                <hr>
+                <h2 class="logo-font mb-4">My Profile</h2>
+                <hr>
+                <header>
+                    <h1>{{ profile.user.username }}'s Profile</h1>
+                </header>
+                <section>
+                    {% if user_type == 'freelancer' %}
+                        <h2>Freelancer Details</h2>
+                        <p><strong>Specialty:</strong> {{ profile.specialty.name }}</p>
+                        <p><strong>Bio:</strong> {{ profile.bio }}</p>
+                        <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
+                        <p><strong>Available for Meetings:</strong> {{ profile.available_for_meetings }}</p>
+                        <p><strong>Country:</strong> {{ profile.country }}</p>
+                        <p><strong>Out of Office:</strong> {{ profile.out_of_office|yesno:"Yes,No" }}</p>
+                        <p><strong>LinkedIn Profile:</strong> <a href="{{ profile.linkedin_profile }}">{{ profile.linkedin_profile }}</a></p>
+                        <p><strong>Past Jobs Links:</strong> {{ profile.past_jobs_links }}</p>
+                        {% if profile.profile_image %}
+                            <img src="{{ profile.profile_image.url }}" alt="{{ profile.user.username }}'s Profile Picture" class="profile-image">
+                        {% endif %}
+                    {% elif user_type == 'employer' %}
+                        <h2>Employer Details</h2>
+                        <p><strong>Company Name:</strong> {{ profile.company_name }}</p>
+                        <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
+                        <p><strong>Company Address:</strong> {{ profile.company_address }}</p>
+                        <p><strong>VAT Number:</strong> {{ profile.vat_number }}</p>
+                        <p><strong>Country:</strong> {{ profile.country }}</p>
+                    {% endif %}
+                </section>
+                <section>
+                    <h2>Subscription Details</h2>
+                    {% if subscription %}
+                        <p><strong>Plan:</strong> {{ subscription.plan.name }}</p>
+                        <p><strong>Status:</strong> {{ subscription.status }}</p>
+                        <p><strong>Start Date:</strong> {{ subscription.start_date }}</p>
+                        <p><strong>End Date:</strong> {{ subscription.end_date }}</p>
+                    {% else %}
+                        <p>No active subscription.</p>
+                    {% endif %}
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock %}
