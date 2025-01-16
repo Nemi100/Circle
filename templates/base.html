@@ -76,7 +76,8 @@
                                 {% if request.user.is_superuser %}
                                     <a href="" class="dropdown-item">Site Management</a>
                                 {% endif %}
-                                <a href="{% url 'account_signup' %}" class="dropdown-item">My Profile</a>
+                                <a href="{% url 'dashboard:user_dashboard' username=request.user.username %}" class="dropdown-item">Dashboard</a>
+                                <a href="{% url 'dashboard:view_profile' username=request.user.username %}" class="dropdown-item">View My
                                 <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
                             {% else %}
                                 <a href="{% url 'account_signup' %}" class="dropdown-item">Register</a>

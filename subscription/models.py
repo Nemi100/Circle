@@ -11,7 +11,7 @@ class Plan(models.Model):
         return self.name
 
 class Subscription(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)  # Ensure one subscription per user
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
     stripe_subscription_id = models.CharField(max_length=100, unique=True)
     status = models.CharField(max_length=50)
@@ -20,3 +20,11 @@ class Subscription(models.Model):
 
     def __str__(self):
         return f'{self.user} - {self.plan}'
+
+    def clean(self):
+        if Subscription.objects.filter(user=self.user).exists():
+            raise ValidationError('User already has an active subscription.')
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
