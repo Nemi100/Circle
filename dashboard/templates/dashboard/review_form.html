@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %} | {{ form.instance.pk|yesno:"Edit Review,Add a Review" }} {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="overlay"></div>
+<div class="container profile-overlay">
+    <h2 class="logo-font mb-4">{{ form.instance.pk|yesno:"Edit Review,Add a Review" }}</h2>
+    <hr>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">{{ form.instance.pk|yesno:"Update,Create" }}</button>
+    </form>
+</div>
+{% endblock %}
