@@ -21,19 +21,19 @@
     <div class="row">
         <div class="col-md-3">
             <div class="card mb-4">
-                <div class="card-header">
+                <div class="card-header text-white bg-primary">
                     <h3>{{ profile.user.username }}'s Dashboard</h3>
                 </div>
                 <div class="card-body">
                     <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'dashboard:edit_profile' username=profile.user.username %}">Edit Profile</a>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link btn btn-outline-primary" href="{% url 'dashboard:edit_profile' username=profile.user.username %}">Edit Profile</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'dashboard:post_job' %}">Post a Job</a>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link btn btn-outline-primary" href="{% url 'dashboard:post_job' %}">Post a Job</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'dashboard:view_profile' username=profile.user.username %}">View Profile</a>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link btn btn-outline-primary" href="{% url 'dashboard:view_profile' username=profile.user.username %}">View Profile</a>
                         </li>
                     </ul>
                 </div>
@@ -41,8 +41,8 @@
         </div>
 
         <div class="col-md-9">
-            <div class="row">
-                <div class="col">
+            <div class="card">
+                <div class="card-body">
                     {% if user_type == 'freelancer' %}
                         <h2>Freelancer Details</h2>
                         <p><strong>Skill:</strong> {{ profile.skill.name }}</p>
@@ -51,10 +51,10 @@
                         <p><strong>Available for Meetings:</strong> {{ profile.available_for_meetings }}</p>
                         <p><strong>Country:</strong> {{ profile.country }}</p>
                         <p><strong>Out of Office:</strong> {{ profile.out_of_office|yesno:"Yes,No" }}</p>
-                        <p><strong>LinkedIn Profile:</strong> <a href="{{ profile.linkedin_profile }}">{{ profile.linkedin_profile }}</a></p>
+                        <p><strong>LinkedIn Profile:</strong> <a href="{{ profile.linkedin_profile }}" target="_blank">{{ profile.linkedin_profile }}</a></p>
                         <p><strong>Past Jobs Links:</strong> {{ profile.past_jobs_links }}</p>
                         {% if profile.profile_image %}
-                            <img src="{{ profile.profile_image.url }}" alt="{{ profile.user.username }}'s Profile Picture">
+                            <img src="{{ profile.profile_image.url }}" alt="{{ profile.user.username }}'s Profile Picture" class="img-fluid rounded-circle">
                         {% endif %}
                         <h3>Available Skills</h3>
                         <ul>

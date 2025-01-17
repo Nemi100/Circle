@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from profiles.models import FreelancerProfile, EmployerProfile, Skill
 from subscription.models import Subscription
-from .forms import FreelancerProfileForm, EmployerProfileForm, JobForm
+from .models import Job, Review
+from .forms import FreelancerProfileForm, EmployerProfileForm, JobForm, ReviewForm
 
 @login_required 
 def user_dashboard(request, username): 
@@ -100,3 +101,39 @@ def post_job(request):
     else:
         form = JobForm()
     return render(request, 'jobs/post_job.html', {'form': form})
+
+@login_required 
+def review_list(request): 
+    reviews = Review.objects.all() 
+    return render(request, 'dashboard/review_list.html', {'reviews': reviews})
+
+@login_required 
+def review_create(request): 
+    if request.method == 'POST': 
+        form = ReviewForm(request.POST) 
+        if form.is_valid(): 
+            form.save()
+            return redirect('review_list') 
+    else: 
+        form = ReviewForm() 
+    return render(request, 'dashboard/review_form.html', {'form': form})
+
+@login_required 
+def review_delete(request, pk): 
+    review = get_object_or_404(Review, pk=pk) 
+    if request.method == 'POST': 
+        review.delete() 
+        return redirect('review_list') 
+    return render(request, 'dashboard/review_confirm_delete.html', {'review': review})
+
+@login_required 
+def review_update(request, pk): 
+    review = get_object_or_404(Review, pk=pk) 
+    if request.method == 'POST': 
+        form = ReviewForm(request.POST, instance=review) 
+        if form.is_valid(): 
+            form.save() 
+            return redirect('review_list') 
+    else: 
+        form = ReviewForm(instance=review) 
+    return render(request, 'dashboard/review_form.html', {'form': form})

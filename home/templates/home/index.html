@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block extra_css %} 
+    <link rel="stylesheet" href="{% static 'home/css/home.css' %}"> 
+{% endblock %}
+
+
 {% block page_header %}
     <div class="background-div">
         <div class="container header-container">
@@ -10,16 +15,19 @@
         </div>
     </div>
 {% endblock %}
+
 {% block content %}
-    <div class="jumbotron text-center bg-transparent">
-        <h1 class="display-4 logo-font">Welcome to Circle!</h1>
-        <p class="lead">Connecting Visionaries with Tech Wizards</p>
-        <hr class="my-4">
-        <p>Post a Job & One of Tech Experts Will Get In Touch Shortly.</p>
-        <div>
-            <h4>
-                <a href="#" class="btn btn-primary btn-lg py-3 text-uppercase">Get started</a>
-            </h4>
+    <div class="centered-content">
+        <div class="jumbotron text-center bg-transparent">
+            <h1 class="display-4 logo-font">Welcome to Circle!</h1>
+            <p class="lead">Connecting Visionaries with Tech Wizards</p>
+            <hr class="my-4">
+            <p>Post a Job & One of Our Tech Experts Will Get In Touch Shortly.</p>
+            <div>
+                <h4>
+                    <a href="#" class="btn btn-primary btn-lg py-3 text-uppercase">Get started</a>
+                </h4>
+            </div>
         </div>
     </div>
 {% endblock %}
