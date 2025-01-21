@@ -1,58 +1,135 @@
-import stripe
+from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.contrib import messages
 from django.conf import settings
+from django.utils import timezone
 from django.http import JsonResponse
-from django.views import View
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from djstripe.models import APIKey
-from .models import Plan, Subscription
-from django.contrib.auth.models import User
+import stripe
+from djstripe.models import Price
+from .forms import SubscriptionCheckoutForm
+from .models import Subscription
 
-# Fetch the Stripe key from the djstripe models
-stripe_api_key = APIKey.objects.filter(livemode=False).first()
-if stripe_api_key:
-    stripe.api_key = stripe_api_key.secret
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
-@method_decorator(csrf_exempt, name='dispatch')
-class StripeWebhookView(View):
-    def post(self, request, *args, **kwargs):
-        payload = request.body
-        sig_header = request.META['HTTP_STRIPE_SIGNATURE']
-        endpoint_secret = 'your_webhook_secret'
+def subscription_plans(request):
+    prices = Price.objects.all()  # Fetch all prices from the database
+    context = {
+        'prices': prices,
+    }
+    return render(request, 'subscription/subscription_plans.html', context)
 
-        try:
-            event = stripe.Webhook.construct_event(
-                payload, sig_header, endpoint_secret
-            )
-        except ValueError as e:
-            return JsonResponse({'error': str(e)}, status=400)
-        except stripe.error.SignatureVerificationError as e:
-            return JsonResponse({'error': str(e)}, status=400)
-
-        # Handle the event
-        event_type = event['type']
-        data = event['data']['object']
-
-        if event_type == 'customer.subscription.created':
-            customer_email = data['customer_email']
-            user, created = User.objects.get_or_create(email=customer_email)
-            plan_id = data['plan']['id']
-            plan, created = Plan.objects.get_or_create(
-                stripe_plan_id=plan_id,
-                defaults={
-                    'name': data['plan']['nickname'],
-                    'price': data['plan']['amount'] / 100,
-                    'currency': data['plan']['currency']
-                }
-            )
-            Subscription.objects.create(
-                user=user,
-                plan=plan,
-                stripe_subscription_id=data['id'],
-                status=data['status'],
-                start_date=data['start_date'],
-                end_date=data['current_period_end']
-            )
+def create_checkout_session(request, price_id):
+    YOUR_DOMAIN = "http://localhost:8000"
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[
+                {
+                    'price': price_id,
+                    'quantity': 1,
+                },
+            ],
+            mode='subscription',
+            success_url=YOUR_DOMAIN + '/subscription/success/{CHECKOUT_SESSION_ID}',
+            cancel_url=YOUR_DOMAIN + '/subscription/',
+        )
+        return JsonResponse({
+            'id': checkout_session.id
+        })
+    except Exception as e:
+        return JsonResponse({
+            'error': str(e)
+        })
 
 
-        return JsonResponse({'status': 'success'})
+
+from djstripe.models import Price
+from .models import Subscription
+
+def subscription_checkout(request):
+    stripe_public_key = settings.STRIPE_PUBLIC_KEY
+    price_id = request.GET.get('price_id')
+
+    if not price_id:
+        messages.error(request, 'No price selected.')
+        return redirect('subscription:subscribe')
+
+    price = get_object_or_404(Price, id=price_id)
+
+    if request.method == 'POST':
+        form_data = {
+            'user': request.user.id,
+            'email': request.POST.get('email'),
+        }
+        subscription_form = SubscriptionCheckoutForm(form_data)
+        if subscription_form.is_valid():
+            subscription = subscription_form.save(commit=False)
+            subscription.start_date = timezone.now()
+            subscription.end_date = timezone.now() + timezone.timedelta(days=365)  # Example duration of 1 year
+            try:
+                customer = stripe.Customer.create(
+                    email=form_data['email'],
+                    name=request.user.get_full_name(),
+                )
+                stripe_subscription = stripe.Subscription.create(
+                    customer=customer.id,
+                    items=[{'price': price_id}],
+                )
+                subscription.stripe_subscription_id = stripe_subscription.id
+                subscription.user = request.user
+                subscription.save()
+                messages.success(request, 'Subscription created successfully!')
+                return redirect('subscription:subscription_success', subscription_id=subscription.id)
+            except Exception as e:
+                messages.error(request, f"An error occurred: {e}")
+
+        else:
+            messages.error(request, 'There was an error with your form. Please double-check your information.')
+    else:
+        subscription_form = SubscriptionCheckoutForm(initial={'user': request.user, 'email': request.user.email})
+
+    if not stripe_public_key:
+        messages.warning(request, 'Stripe public key is missing. Did you forget to set it in your environment?')
+
+    template = 'subscription/subscription_checkout.html'
+    context = {
+        'form': subscription_form,
+        'stripe_public_key': stripe_public_key,
+        'price': price,
+    }
+
+    return render(request, template, context)
+
+
+    print("Form:", subscription_form)
+
+    template = 'subscription/subscription_checkout.html'
+    context = {
+        'form': subscription_form,
+        'stripe_public_key': stripe_public_key,
+        'price': price,
+    }
+
+    return render(request, template, context)
+
+
+def subscription_success(request, subscription_id):
+    subscription = get_object_or_404(Subscription, id=subscription_id)
+    messages.success(request, f'Subscription successfully processed! \
+        Your subscription ID is {subscription_id}. A confirmation \
+        email will be sent to {request.user.email}.')
+
+    template = 'subscription/subscription_checkout.html'
+    context = {
+        'subscription': subscription,
+    }
+
+    return render(request, template, context)
+
+def success(request, subscription_id):
+    pass
+
+def webhook(request):
+    pass
+
+def subscription_view(request):
+    pass

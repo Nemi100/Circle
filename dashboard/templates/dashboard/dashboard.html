@@ -29,11 +29,16 @@
                         <li class="nav-item mb-2">
                             <a class="nav-link btn btn-outline-primary" href="{% url 'dashboard:edit_profile' username=profile.user.username %}">Edit Profile</a>
                         </li>
+                        {% if user_type == 'employer' %}
                         <li class="nav-item mb-2">
                             <a class="nav-link btn btn-outline-primary" href="{% url 'dashboard:post_job' %}">Post a Job</a>
                         </li>
+                        {% endif %}
                         <li class="nav-item mb-2">
                             <a class="nav-link btn btn-outline-primary" href="{% url 'dashboard:view_profile' username=profile.user.username %}">View Profile</a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a class="nav-link btn btn-outline-primary" href="{% url 'subscription:subscribe' %}">Subscribe</a>
                         </li>
                     </ul>
                 </div>
@@ -45,23 +50,29 @@
                 <div class="card-body">
                     {% if user_type == 'freelancer' %}
                         <h2>Freelancer Details</h2>
-                        <p><strong>Skill:</strong> {{ profile.skill.name }}</p>
+                        <p><strong>Skills:</strong> 
+                            <ul>
+                                {% for skill in profile.skills.all %}
+                                    <li>{{ skill.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </p>
                         <p><strong>Bio:</strong> {{ profile.bio }}</p>
                         <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
                         <p><strong>Available for Meetings:</strong> {{ profile.available_for_meetings }}</p>
                         <p><strong>Country:</strong> {{ profile.country }}</p>
                         <p><strong>Out of Office:</strong> {{ profile.out_of_office|yesno:"Yes,No" }}</p>
                         <p><strong>LinkedIn Profile:</strong> <a href="{{ profile.linkedin_profile }}" target="_blank">{{ profile.linkedin_profile }}</a></p>
-                        <p><strong>Past Jobs Links:</strong> {{ profile.past_jobs_links }}</p>
+                        <p><strong>Past Jobs Links:</strong>
+                            <ul>
+                                {% for job_link in profile.job_links.all %}
+                                    <li><a href="{{ job_link.url }}">{{ job_link.url }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </p>
                         {% if profile.profile_image %}
-                            <img src="{{ profile.profile_image.url }}" alt="{{ profile.user.username }}'s Profile Picture" class="img-fluid rounded-circle">
+                            <img src="{{ profile.profile_image.url }}" alt="{{ profile.user.username }}'s Profile Picture" class="img-fluid rounded-circle" width="150" height="150">
                         {% endif %}
-                        <h3>Available Skills</h3>
-                        <ul>
-                            {% for skill in skills %}
-                                <li>{{ skill.name }}</li>
-                            {% endfor %}
-                        </ul>
                     {% elif user_type == 'employer' %}
                         <h2>Employer Details</h2>
                         <p><strong>Company Name:</strong> {{ profile.company_name }}</p>

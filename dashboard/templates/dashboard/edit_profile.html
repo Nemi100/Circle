@@ -42,11 +42,17 @@
         <div class="row">
             <div class="col">
                 <div class="form-container">
-                    <form method="post" action="">
+                    <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {{ form.as_p }}
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        {{ profile_form.as_p }}
+                        <h3>Add Job Links (1-5)</h3>
+                        {% for job_link_form in job_link_forms %}
+                            {{ job_link_form.as_p }}
+                        {% endfor %}
+                        <button type="submit">Save</button>
                     </form>
+                    
+                    
                 </div>
             </div>
         </div>

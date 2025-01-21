@@ -1,12 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block extra_title %} | Pofile Page {% endblock %}
+{% block extra_title %} | Profile Page {% endblock %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
 {% endblock %}
-
 
 {% block content %}
 <div class="overlay"></div>
@@ -29,14 +28,24 @@
             </div>
         </div>
         <div class="col-md-8">
-            <p>Skill: {{ profile.skill }}</p>
+            <p>Skills:</p>
+            <ul>
+                {% for skill in profile.skills.all %}
+                    <li>{{ skill.name }}</li>
+                {% endfor %}
+            </ul>
             <p>Bio: {{ profile.bio }}</p>
             <p>Phone Number: {{ profile.phone_number }}</p>
             <p>Available for Meetings: {{ profile.available_for_meetings }}</p>
             <p>Country: {{ profile.country }}</p>
             <p>LinkedIn Profile: <a href="{{ profile.linkedin_profile }}">{{ profile.linkedin_profile }}</a></p>
-            <p>Past Jobs Links: {{ profile.past_jobs_links }}</p>
-            <p>Out of Office: {{ profile.out_of_office }}</p>
+            <p>Out of Office: {{ profile.out_of_office|yesno:"Yes,No" }}</p>
+            <p>Past Jobs Links:</p>
+            <ul>
+                {% for job_link in profile.job_links.all %}
+                    <li><a href="{{ job_link.url }}" target="_blank">{{ job_link.url }}</a></li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 </div>

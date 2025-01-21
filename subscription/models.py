@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+
 
 class Plan(models.Model):
     stripe_plan_id = models.CharField(max_length=100, unique=True)
@@ -11,11 +13,11 @@ class Plan(models.Model):
         return self.name
 
 class Subscription(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)  # Ensure one subscription per user
+    user = models.OneToOneField(User, on_delete=models.CASCADE)  # Ensures one subscription per user
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
     stripe_subscription_id = models.CharField(max_length=100, unique=True)
-    status = models.CharField(max_length=50)
-    start_date = models.DateTimeField()
+    status = models.CharField(max_length=50, blank=True)
+    start_date = models.DateTimeField(default=timezone.now)
     end_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
@@ -28,3 +30,5 @@ class Subscription(models.Model):
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)
+
+
