@@ -1,6 +1,6 @@
 from django import forms
 from .models import Job, Review
-from profiles.models import FreelancerProfile, EmployerProfile, Skill  # Import profiles if needed for foreign key relations
+from profiles.models import FreelancerProfile, EmployerProfile, Skill, JobLink
 
 class JobForm(forms.ModelForm):
     class Meta:
@@ -13,13 +13,17 @@ class ReviewForm(forms.ModelForm):
         fields = ['rating', 'feedback']
 
 class FreelancerProfileForm(forms.ModelForm):
-    skill = forms.ModelChoiceField(queryset=Skill.objects.all(), label="Select Skill")
+    skills = forms.ModelMultipleChoiceField(
+        queryset=Skill.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
 
     class Meta:
         model = FreelancerProfile
         fields = [
-            'user', 'skill', 'bio', 'phone_number', 'available_for_meetings', 
-            'country', 'out_of_office', 'linkedin_profile', 'past_jobs_links', 'profile_image'
+            'user', 'skills', 'bio', 'phone_number', 'available_for_meetings',
+            'country', 'out_of_office', 'linkedin_profile', 'profile_image'
         ]
 
 class EmployerProfileForm(forms.ModelForm):
@@ -29,3 +33,10 @@ class EmployerProfileForm(forms.ModelForm):
             'user', 'company_name', 'phone_number', 'company_address',
             'vat_number', 'country'
         ]
+
+class JobLinkForm(forms.ModelForm):
+    url = forms.URLField(required=False)  
+
+    class Meta:
+        model = JobLink
+        fields = ['url']

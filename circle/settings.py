@@ -12,9 +12,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-# Stripe Keys - Removed to be managed directly from Django Admin
-# STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY', default=None)
-# STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY', default=None)
+
+
+# Stripe settings
+STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
+STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET')
+DJSTRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET')
+STRIPE_LIVE_MODE = False  # Ensure this is False for test mode
+
+print("STRIPE_PUBLIC_KEY:", STRIPE_PUBLIC_KEY)
+print("STRIPE_SECRET_KEY:", STRIPE_SECRET_KEY)
+print("STRIPE_WEBHOOK_SECRET:", STRIPE_WEBHOOK_SECRET)
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -37,7 +47,7 @@ INSTALLED_APPS = [
     'djstripe',
 ]
 
-DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"  # Use of "id" for new installations. Use of "djstripe_id" for existing installations
+DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -140,3 +150,27 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'circle': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}

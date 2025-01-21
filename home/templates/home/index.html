@@ -6,28 +6,46 @@
 {% endblock %}
 
 
-{% block page_header %}
-    <div class="background-div">
-        <div class="container header-container">
-            <div class="row">
-                <div class="col"></div>
-            </div>
-        </div>
-    </div>
-{% endblock %}
 
 {% block content %}
-    <div class="centered-content">
-        <div class="jumbotron text-center bg-transparent">
-            <h1 class="display-4 logo-font">Welcome to Circle!</h1>
-            <p class="lead">Connecting Visionaries with Tech Wizards</p>
-            <hr class="my-4">
-            <p>Post a Job & One of Our Tech Experts Will Get In Touch Shortly.</p>
-            <div>
-                <h4>
-                    <a href="#" class="btn btn-primary btn-lg py-3 text-uppercase">Get started</a>
-                </h4>
+<div class="container mt-5 pt-5">
+    <div class="jumbotron bg-white text-center my-5">
+        <h1 class="display-4 logo-font">Welcome to Circle!</h1>
+        <p class="lead">Connecting Visionaries with Tech Wizards</p>
+        <hr class="my-4">
+        <p>Post a Job & One of Our Tech Experts Will Get In Touch Shortly.</p>
+        <div>
+            <h4>
+                <a href="#" class="btn shop-now-button py-3 text-uppercase">Get started</a>
+            </h4>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Feature 1</h5>
+                    <p class="card-text">Detail about feature 1 that makes CodeNomad unique and valuable.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Feature 2</h5>
+                    <p class="card-text">Detail about feature 2 that enhances user experience and benefits.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Feature 3</h5>
+                    <p class="card-text">Detail about feature 3 that highlights the community aspect of CodeNomad.</p>
+                </div>
             </div>
         </div>
     </div>
+</div>
 {% endblock %}

@@ -1,0 +1,105 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    color: #555; 
+    font-family: 'Lato', sans-serif;
+    flex-direction: column;
+}
+
+body {
+    background-color: #FFF5E1; 
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 10px;
+}
+
+header .navbar-nav .nav-item .nav-link {
+    padding: 10px 15px;
+    font-weight: bold;
+    color: #4B3E2A; 
+}
+
+header .btn-primary {
+    background-color: #F37B4E; 
+    border-color: #F37B4E;
+}
+
+.btn {
+    margin-top: 1rem;
+}
+
+.btn-primary {
+    background-color: #F37B4E; 
+    border-color: #F37B4E;
+}
+
+.btn-outline-primary {
+    color: #F37B4E; 
+    border-color: #F37B4E;
+}
+
+.btn-outline-primary:hover {
+    background-color: #F37B4E; 
+    color: #fff;
+}
+
+footer {
+    background-color: #2E2E2E; 
+    color: #FFF5E1; 
+    padding: 2rem;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+}
+
+footer .footer-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+}
+
+footer .footer-content .column {
+    flex: 1;
+    padding: 1rem;
+}
+
+footer .footer-content .social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+footer .footer-content .social-icons a {
+    color: #FFF5E1; 
+    text-decoration: none;
+    font-size: 1.5rem;
+}
+
+footer .footer-content .social-icons a:hover {
+    color: #F37B4E; 
+}
+
+.footer-bottom {
+    margin-top: 1rem;
+    border-top: 1px solid #FFF5E1; 
+    padding-top: 1rem;
+    width: 100%;
+    text-align: center;
+}
+
+.container, .profile-overlay, .dashboard-overlay, .pricing-table {
+    padding: 2rem;
+}
+
+@media (max-width: 768px) {
+    .container, .profile-overlay, .dashboard-overlay, .pricing-table {
+        padding: 1rem;
+    }
+}

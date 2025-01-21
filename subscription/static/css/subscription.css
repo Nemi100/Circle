@@ -1,33 +1,132 @@
-.overlay {
-    background: rgba(255, 255, 255, 0.8); 
-    backdrop-filter: blur(10px); 
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+html, body {
     height: 100%;
-    z-index: 1;
+    margin: 0;
+    color: #555; 
+    font-family: 'Lato', sans-serif;
 }
 
-.content {
+body {
+    background-color: #FFFFFF; /* Changed to white background */
+}
+
+header .navbar-nav .nav-item .nav-link {
+    padding: 10px 15px;
+    font-weight: bold;
+    color: #4B3E2A; 
+}
+
+header .btn-primary {
+    background-color: #F37B4E; 
+    border-color: #F37B4E;
+}
+
+.container {
     position: relative;
-    z-index: 2;
+    z-index: 1; 
+}
+
+.pricing-table {
+    max-width: 900px;
+    background: #FFFFFF; /* Changed to white background */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); 
+    margin: 20px auto;
+}
+
+.card {
+    background: #FFFFFF; /* Changed to white background */
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+    margin: 20px 0;
+}
+
+.card-header {
+    background-color: #F37B4E; 
+    color: #FFFFFF; /* Adjusted for contrast */
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+}
+
+.card-body {
     padding: 20px;
 }
 
-/* Basic styles for the iframe */
-.pricing-table iframe {
-    width: 100%;
-    height: 600px; /* Adjust height as needed */
-    border: none;
+.nav-link {
+    color: #4B3E2A; 
 }
 
-/* Media query for wider screens */
-@media (min-width: 992px) {
-    .pricing-table iframe {
-        width: 80%;
-        height: 800px; /* Adjust height for wider screens */
-        margin: 0 auto;
-        display: block;
-    }
+.nav-link:hover,
+.nav-link:active,
+.nav-link:focus {
+    color: #F37B4E; 
+}
+
+p {
+    font-size: 16px;
+    color: #4B3E2A; 
+    line-height: 1.6;
+}
+
+a {
+    color: #F37B4E; 
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.StripeElement,
+.stripe-style-input {
+  box-sizing: border-box;
+  height: 40px;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 0px;
+  background-color: white;
+  box-shadow: 0 1px 3px 0 #e6ebf1;
+  -webkit-transition: box-shadow 150ms ease;
+  transition: box-shadow 150ms ease;
+}
+
+.StripeElement--focus,
+.stripe-style-input:focus,
+.stripe-style-input:active {
+  box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.StripeElement--webkit-autofill {
+  background-color: #fefde5 !important; 
+}
+
+.stripe-style-input::placeholder {
+    color: #aab7c4;
+}
+
+.fieldset-label {
+    position: relative;
+    right: .5rem;
+}
+
+.fieldset-label {
+    position: relative;
+    right: .5rem;
+}
+
+#payment-form .form-control,
+#card-element {
+    color: #000;
+    border: 1px solid #000;
+}
+
+form#subscribe-form {
+    display: block; /* Ensure form is displayed */
+}
+
+.card {
+    background: #FFFFFF; /* Ensure white background */
+    color: #000000; /* Ensure text is visible */
 }

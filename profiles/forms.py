@@ -1,12 +1,18 @@
 from django import forms
-from .models import FreelancerProfile, EmployerProfile, Review, Skill
+from .models import FreelancerProfile, EmployerProfile, Review, Skill, JobLink
 
 class FreelancerProfileForm(forms.ModelForm):
+    skills = forms.ModelMultipleChoiceField(
+        queryset=Skill.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
     class Meta:
         model = FreelancerProfile
         fields = [
-            'user', 'skill', 'bio', 'phone_number', 'available_for_meetings', 
-            'country', 'out_of_office', 'linkedin_profile', 'past_jobs_links', 'profile_image'
+            'user', 'skills', 'bio', 'phone_number', 'available_for_meetings',
+            'country', 'out_of_office', 'linkedin_profile', 'profile_image'
         ]
 
 class EmployerProfileForm(forms.ModelForm):
@@ -21,3 +27,8 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ['rating', 'feedback']
+
+class JobLinkForm(forms.ModelForm):
+    class Meta:
+        model = JobLink
+        fields = ['url']

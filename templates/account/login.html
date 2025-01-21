@@ -8,51 +8,11 @@
 {% endblock head_title %}
 
 {% block extra_css %}
-    <style>
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: -1;
-        }
-        .profile-overlay {
-            background: #ffffff;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 2rem;
-        }
-        .logo-font {
-            font-family: 'Arial', sans-serif;
-            font-weight: bold;
-        }
-        .btn {
-            margin-top: 1rem;
-        }
-        h1, h2 {
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-        }
-        .btn-outline-primary {
-            color: #007bff;
-            border-color: #007bff;
-        }
-        .btn-outline-primary:hover {
-            background-color: #007bff;
-            color: #fff;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/general.css' %}">
+    <link rel="stylesheet" href="{% static 'css/signin.css' %}">
 {% endblock extra_css %}
 
 {% block content %}
-    <div class="overlay"></div>
     <div class="container profile-overlay">
         <h1 class="logo-font">{% trans "Sign In" %}</h1>
         {% if not SOCIALACCOUNT_ONLY %}
@@ -63,6 +23,12 @@
                 </a>
             {% endsetvar %}
             <p>{% blocktranslate %}If you have not created an account yet, then please {{ link }}sign up{{ end_link }} first.{% endblocktranslate %}</p>
+            <div class="card">
+                <div class="card-body">
+                    <p>Get access to exclusive content and features by signing in.</p>
+                    <p>Stay connected with our community and get the latest updates.</p>
+                </div>
+            </div>
             {% url 'account_login' as login_url %}
             <form method="post" action="{{ login_url }}" class="entrance login">
                 {% csrf_token %}
