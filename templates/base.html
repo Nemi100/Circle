@@ -25,7 +25,6 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato&display=swap">
         <link rel="stylesheet" href="{% static 'css/base.css' %}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
     {% endblock %}
 
     <title>Circle {% block extra_title %}{% endblock %}</title>
@@ -78,7 +77,7 @@
                                 {% if request.user.is_superuser %}
                                     <a href="" class="dropdown-item">Site Management</a>
                                 {% endif %}
-                                <a href="{% url 'dashboard:user_dashboard' username=request.user.username %}" class="dropdown-item">Dashboard</a>
+                                <a href="{% url 'dashboard:user_dashboard' %}" class="dropdown-item">Dashboard</a>
                                 <a href="{% url 'dashboard:view_profile' username=request.user.username %}" class="dropdown-item">View My Profile</a>
                                 <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
                             {% else %}
@@ -98,7 +97,6 @@
     
     {% if messages %}
         <div class="message-container">
-            
         </div>
     {% endif %}
 

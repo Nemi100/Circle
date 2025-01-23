@@ -7,10 +7,10 @@ from .views import (
 app_name = 'dashboard'
 
 urlpatterns = [
-    path('<str:username>/', user_dashboard, name='user_dashboard'),
+    path('dashboard/', user_dashboard, name='user_dashboard'), 
     path('add_profile/', add_profile, name='add_profile'),
-    path('edit_profile/<str:username>/', edit_profile, name='edit_profile'),
-    path('delete_profile/<str:username>/', delete_profile, name='delete_profile'),
+    path('edit_profile/', edit_profile, name='edit_profile'),
+    path('delete_profile/', delete_profile, name='delete_profile'),
     path('view_profile/<str:username>/', view_profile, name='view_profile'),  
     path('post-job/', post_job, name='post_job'),
     path('reviews/', review_list, name='review_list'),

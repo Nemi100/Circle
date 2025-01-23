@@ -7,8 +7,8 @@
 {% endblock head_title %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/general.css' %}">
-    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+<link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+    
 {% endblock extra_css %}
 
 {% block content %}
@@ -16,8 +16,8 @@
         <h1 class="logo-font">{% trans "Sign Up" %}</h1>
         {% setvar link %}
             <a href="{{ login_url }}">
-            {% endsetvar %}
-            {% setvar end_link %}
+        {% endsetvar %}
+        {% setvar end_link %}
             </a>
         {% endsetvar %}
         <p>{% blocktranslate %}Already have an account? Then please {{ link }}sign in{{ end_link }}.{% endblocktranslate %}</p>
@@ -28,12 +28,10 @@
             </div>
         </div>
         {% if not SOCIALACCOUNT_ONLY %}
-            {% url 'account_signup' as action_url %}
+            {% url 'profiles:account_signup' as action_url %}
             <form method="post" action="{{ action_url }}" class="entrance signup">
                 {% csrf_token %}
-                <div class="form-group">
-                    {{ form.as_p }}
-                </div>
+                {{ form.as_p }} <!-- Render the form with the user_type field included -->
                 {{ redirect_field }}
                 <button type="submit" class="btn btn-primary">{% trans "Sign Up" %}</button>
             </form>

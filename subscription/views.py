@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.utils import timezone
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 import stripe
 from djstripe.models import Price
 from .forms import SubscriptionCheckoutForm
@@ -11,7 +12,7 @@ from .models import Subscription
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 def subscription_plans(request):
-    prices = Price.objects.all()  # Fetch all prices from the database
+    prices = Price.objects.all()  
     context = {
         'prices': prices,
     }
@@ -40,11 +41,7 @@ def create_checkout_session(request, price_id):
             'error': str(e)
         })
 
-
-
-from djstripe.models import Price
-from .models import Subscription
-
+@login_required
 def subscription_checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     price_id = request.GET.get('price_id')
@@ -64,7 +61,7 @@ def subscription_checkout(request):
         if subscription_form.is_valid():
             subscription = subscription_form.save(commit=False)
             subscription.start_date = timezone.now()
-            subscription.end_date = timezone.now() + timezone.timedelta(days=365)  # Example duration of 1 year
+            subscription.end_date = timezone.now() + timezone.timedelta(days=365) 
             try:
                 customer = stripe.Customer.create(
                     email=form_data['email'],
@@ -99,24 +96,9 @@ def subscription_checkout(request):
 
     return render(request, template, context)
 
-
-    print("Form:", subscription_form)
-
-    template = 'subscription/subscription_checkout.html'
-    context = {
-        'form': subscription_form,
-        'stripe_public_key': stripe_public_key,
-        'price': price,
-    }
-
-    return render(request, template, context)
-
-
 def subscription_success(request, subscription_id):
     subscription = get_object_or_404(Subscription, id=subscription_id)
-    messages.success(request, f'Subscription successfully processed! \
-        Your subscription ID is {subscription_id}. A confirmation \
-        email will be sent to {request.user.email}.')
+    messages.success(request, f'Subscription successfully processed! Your subscription ID is {subscription_id}. A confirmation email will be sent to {request.user.email}.')
 
     template = 'subscription/subscription_checkout.html'
     context = {

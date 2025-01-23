@@ -1,86 +1,137 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from profiles.models import FreelancerProfile, EmployerProfile, Skill, JobLink
 from subscription.models import Subscription
-from .models import Job, Review
-from .forms import FreelancerProfileForm, EmployerProfileForm, JobForm, ReviewForm, JobLinkForm
+from .models import Job, Review, PreviousWork
+from .forms import FreelancerProfileForm, ClientProfileForm, EmployerProfileForm, JobForm, ReviewForm, PreviousWorkForm
 
 @login_required
-def user_dashboard(request, username):
-    user = get_object_or_404(User, username=username)
-    subscription = Subscription.objects.filter(user=user).first()
+def user_dashboard(request):
+    user = request.user
     
-    if hasattr(user, 'freelancerprofile'):
-        profile = user.freelancerprofile
-        user_type = 'freelancer'
-        skills = profile.skills.all()  # Adjusted for multiple skills
-    elif hasattr(user, 'employerprofile'):
+    if hasattr(user, 'employerprofile'):
         profile = user.employerprofile
         user_type = 'employer'
-        skills = []
+        template = 'dashboard/employer_dashboard.html'
+        context = {
+            'profile': profile,
+            'user_type': user_type,
+        }
+    elif hasattr(user, 'clientprofile'):
+        profile = user.clientprofile
+        user_type = 'client'
+        subscription = Subscription.objects.filter(user=user).first()
+        template = 'dashboard/client_dashboard.html'
+        context = {
+            'profile': profile,
+            'user_type': user_type,
+            'subscription': subscription,
+        }
+    elif hasattr(user, 'freelancerprofile'):
+        profile = user.freelancerprofile
+        user_type = 'freelancer'
+        subscription = Subscription.objects.filter(user=user).first()
+        template = 'dashboard/freelancer_dashboard.html'
+        context = {
+            'profile': profile,
+            'user_type': user_type,
+            'subscription': subscription,
+        }
+    else:
+        profile = None
+        template = 'dashboard/dashboard.html'
+        context = {
+            'profile': profile,
+        }
 
-    context = {
-        'profile': profile,
-        'subscription': subscription,
-        'user_type': user_type,
-        'skills': skills
-    }
-
-    return render(request, 'dashboard/dashboard.html', context)
+    return render(request, template, context)
 
 @login_required
 def view_profile(request, username):
     user = get_object_or_404(User, username=username)
-    profile = user.freelancerprofile if hasattr(user, 'freelancerprofile') else user.employerprofile
+    if hasattr(user, 'freelancerprofile'):
+        profile = user.freelancerprofile
+    elif hasattr(user, 'clientprofile'):
+        profile = user.clientprofile
+    elif hasattr(user, 'employerprofile'):
+        profile = user.employerprofile
+    else:
+        profile = None  
     return render(request, 'dashboard/view_profile.html', {'profile': profile})
 
 @login_required
 def add_profile(request):
-    if request.method == 'POST':
-        form = FreelancerProfileForm(request.POST) if 'freelancer' in request.POST else EmployerProfileForm(request.POST)
-        if form.is_valid():
-            form.save()
-        return redirect('dashboard:user_dashboard', username=request.user.username)
+    user = request.user
+    if hasattr(user, 'freelancerprofile'):
+        form_class = FreelancerProfileForm
+        extra_form_class = PreviousWorkForm
+    elif hasattr(user, 'clientprofile'):
+        form_class = ClientProfileForm
+        extra_form_class = None
     else:
-        freelancer_form = FreelancerProfileForm()
-        employer_form = EmployerProfileForm()
-    return render(request, 'dashboard/add_profile.html', {'freelancer_form': freelancer_form, 'employer_form': employer_form})
+        form_class = EmployerProfileForm
+        extra_form_class = None
+
+    if request.method == 'POST':
+        profile_form = form_class(request.POST, request.FILES)
+        if extra_form_class:
+            extra_form = extra_form_class(request.POST)
+        if profile_form.is_valid() and (not extra_form_class or extra_form.is_valid()):
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.save()
+            if extra_form_class:
+                extra_work = extra_form.save(commit=False)
+                extra_work.profile = profile
+                extra_work.save()
+            return redirect('dashboard:user_dashboard')
+    else:
+        profile_form = form_class()
+        if extra_form_class:
+            extra_form = extra_form_class()
+
+    return render(request, 'dashboard/add_profile.html', {
+        'profile_form': profile_form,
+        'extra_form': extra_form if extra_form_class else None
+    })
 
 @login_required
-def edit_profile(request, username):
-    user = get_object_or_404(User, username=username)
-    profile = user.freelancerprofile if hasattr(user, 'freelancerprofile') else user.employerprofile
-    form_class = FreelancerProfileForm if hasattr(user, 'freelancerprofile') else EmployerProfileForm
-    job_link_forms = [JobLinkForm(request.POST or None, prefix=str(i)) for i in range(5)]
+def edit_profile(request):
+    user = request.user
+    if hasattr(user, 'freelancerprofile'):
+        profile = user.freelancerprofile
+        form_class = FreelancerProfileForm
+    elif hasattr(user, 'clientprofile'):
+        profile = user.clientprofile
+        form_class = ClientProfileForm
+    else:
+        profile = user.employerprofile
+        form_class = EmployerProfileForm
 
     if request.method == 'POST':
         profile_form = form_class(request.POST, request.FILES, instance=profile)
         if profile_form.is_valid():
             profile_form.save()
-            JobLink.objects.filter(profile=profile).delete()  # Clear existing job links
-            for job_link_form in job_link_forms:
-                if job_link_form.is_valid():
-                    job_link = job_link_form.save(commit=False)
-                    job_link.profile = profile
-                    job_link.save()
-            return redirect('dashboard:user_dashboard', username=username)
+            return redirect('dashboard:user_dashboard')
     else:
         profile_form = form_class(instance=profile)
 
     return render(request, 'dashboard/edit_profile.html', {
         'profile_form': profile_form,
-        'job_link_forms': job_link_forms,
         'profile': profile
     })
 
 @login_required
-def delete_profile(request, username):
-    user = get_object_or_404(User, username=username)
-    profile = user.freelancerprofile if hasattr(user, 'freelancerprofile') else user.employerprofile
+def delete_profile(request):
+    user = request.user
+    if hasattr(user, 'freelancerprofile'):
+        profile = user.freelancerprofile
+    elif hasattr(user, 'clientprofile'):
+        profile = user.clientprofile
+    else:
+        profile = user.employerprofile
     if request.method == 'POST':
         profile.delete()
-        return redirect('dashboard:user_dashboard', username=request.user.username)
+        return redirect('dashboard:user_dashboard')
     return render(request, 'dashboard/delete_profile.html', {'profile': profile})
 
 @login_required
@@ -89,9 +140,9 @@ def post_job(request):
         form = JobForm(request.POST)
         if form.is_valid():
             job = form.save(commit=False)
-            job.employer = request.user.employerprofile
+            job.client = request.user.clientprofile  
             job.save()
-            return redirect('job_list')
+            return redirect('dashboard:user_dashboard')
     else:
         form = JobForm()
     return render(request, 'jobs/post_job.html', {'form': form})

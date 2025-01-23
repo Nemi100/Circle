@@ -1,7 +1,18 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 from django_countries.fields import CountryField
 from djstripe.models import Customer
+
+class UserProfile(models.Model):
+    USER_TYPE_CHOICES = [
+        ('freelancer', 'IT Freelancer'),
+        ('client', 'Client using the services of IT Freelancers'),
+    ]
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES)
+
+    def __str__(self):
+        return self.user.username
 
 class SkillCategory(models.Model):
     name = models.CharField(max_length=100)
@@ -31,11 +42,19 @@ class FreelancerProfile(models.Model):
     def __str__(self):
         return self.user.username
 
-class JobLink(models.Model):
-    profile = models.ForeignKey(FreelancerProfile, on_delete=models.CASCADE, related_name='job_links')
-    url = models.URLField()
+from django.db import models
+from profiles.models import FreelancerProfile
 
-class EmployerProfile(models.Model):
+class PreviousWork(models.Model):
+    profile = models.ForeignKey(FreelancerProfile, on_delete=models.CASCADE, related_name='profiles_previous_works')
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    link = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return self.title
+
+class ClientProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     company_name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=15, blank=True)
@@ -46,18 +65,25 @@ class EmployerProfile(models.Model):
     def __str__(self):
         return self.user.username
 
+class EmployerProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    staff_id = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.user.username
+
 class Review(models.Model):
     freelancer = models.ForeignKey(FreelancerProfile, on_delete=models.CASCADE, related_name='profile_reviews')
-    employer = models.ForeignKey(EmployerProfile, on_delete=models.CASCADE, related_name='profile_reviews')
+    client = models.ForeignKey(ClientProfile, on_delete=models.CASCADE, related_name='profile_reviews')
     rating = models.PositiveIntegerField()
     feedback = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Review for {self.freelancer.user.username} by {self.employer.user.username}"
+        return f"Review for {self.freelancer.user.username} by {self.client.user.username}"
 
 class Job(models.Model):
-    employer = models.ForeignKey(EmployerProfile, on_delete=models.CASCADE, related_name='profile_jobs')
+    client = models.ForeignKey(ClientProfile, on_delete=models.CASCADE, related_name='profile_jobs', default=1)
     title = models.CharField(max_length=100)
     description = models.TextField()
     required_skill = models.ForeignKey(Skill, on_delete=models.SET_NULL, null=True, related_name='profile_jobs')
@@ -76,3 +102,12 @@ class Plan(models.Model):
 
     def __str__(self):
         return self.name
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+    instance.userprofile.save()

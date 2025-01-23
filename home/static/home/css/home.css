@@ -1,61 +1,71 @@
 /* home.css */
+
+/* General Settings */
 body {
-    background-color: #FFF5E1; /* Warm beige */
-    color: #4B3E2A; /* Warm dark brown */
+    background-color: #ffffff; /* Glossy white background */
+    color: #666; /* Grey text */
 }
 
+/* Header Container */
 .header-container {
-    background-color: #FFB570; /* Warm light orange */
+    background-color: #f0f0f0; /* Light grey */
+    padding-top: 40px;
 }
 
+/* Jumbotron */
 .jumbotron {
-    background-color: #FFE7C7; /* Warm cream */
+    background-color: #f8f8f8; /* Slightly lighter grey */
     margin: 0 auto; /* Center the jumbotron */
     width: 80%; /* Increase the width for a bigger jumbotron */
     padding: 2rem; /* Add padding for more content space */
 }
 
+/* Headings and Lead Text */
 h1, h4, .lead {
-    color: #D9534F; /* Warm red */
+    color: #666; /* Grey text */
 }
 
+/* Primary Button */
 .btn-primary {
-    background-color: #F37B4E; /* Warm orange */
-    border-color: #F37B4E;
+    background-color: #666; /* Grey */
+    border-color: #666;
 }
 
 .btn-primary:hover {
-    background-color: #D9534F; /* Darker warm red on hover */
-    border-color: #D9534F;
+    background-color: #999; /* Lighter grey on hover */
+    border-color: #999;
 }
 
+/* Card Styling */
 .card {
-    border-color: #F4A261; /* Light warm orange */
+    border-color: #ccc; /* Light grey */
 }
 
 .card-title {
-    color: #8D5524; /* Deep warm brown */
+    color: #666; /* Grey text */
 }
 
 .card-text {
-    color: #4B3E2A; /* Warm dark brown */
+    color: #666; /* Grey text */
 }
 
+/* Links */
 a {
-    color: #F37B4E; /* Warm orange */
+    color: #666; /* Grey text */
 }
 
 a:hover {
-    color: #D9534F; /* Darker warm red */
+    color: #999; /* Lighter grey on hover */
 }
 
+/* Shop Now Button */
 .shop-now-button {
-    background-color: #FF9A76; /* Warm peach */
-    border-color: #FF9A76;
-    color: #FFFFFF;
+    background-color: #666; /* Grey */
+    border-color: #666;
+    color: #ffffff;
 }
 
 .shop-now-button:hover {
-    background-color: #FF7849; /* Darker warm peach on hover */
-    border-color: #FF7849;
+    background-color: #999; /* Lighter grey on hover */
+    border-color: #999;
 }
