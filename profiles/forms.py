@@ -1,5 +1,5 @@
 from django import forms
-from .models import FreelancerProfile, EmployerProfile, Review, Skill, JobLink
+from profiles.models import FreelancerProfile, ClientProfile, EmployerProfile, Skill, Job, Review, PreviousWork
 
 class FreelancerProfileForm(forms.ModelForm):
     skills = forms.ModelMultipleChoiceField(
@@ -15,20 +15,32 @@ class FreelancerProfileForm(forms.ModelForm):
             'country', 'out_of_office', 'linkedin_profile', 'profile_image'
         ]
 
-class EmployerProfileForm(forms.ModelForm):
+class ClientProfileForm(forms.ModelForm):
     class Meta:
-        model = EmployerProfile
+        model = ClientProfile
         fields = [
             'user', 'company_name', 'phone_number', 'company_address',
             'vat_number', 'country'
         ]
+
+class EmployerProfileForm(forms.ModelForm):
+    class Meta:
+        model = EmployerProfile
+        fields = [
+            'user', 'staff_id'
+        ]
+
+class JobForm(forms.ModelForm):
+    class Meta:
+        model = Job
+        fields = ['title', 'description', 'required_skill', 'website_link']
 
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ['rating', 'feedback']
 
-class JobLinkForm(forms.ModelForm):
+class PreviousWorkForm(forms.ModelForm):
     class Meta:
-        model = JobLink
-        fields = ['url']
+        model = PreviousWork
+        fields = ['title', 'description', 'link']

@@ -25,9 +25,11 @@
                 <div class="profile-info">
                     <h1>{{ profile.user.username }}</h1>
                     {% if user_type == 'freelancer' %}
-                        <p>{{ profile.specialty.name }}</p>
-                    {% elif user_type == 'employer' %}
+                        <p>{{ profile.skills.all|join:", " }}</p>
+                    {% elif user_type == 'client' %}
                         <p>{{ profile.company_name }}</p>
+                    {% elif user_type == 'employer' %}
+                        <p>Staff ID: {{ profile.staff_id }}</p>
                     {% endif %}
                 </div>
             </div>
@@ -38,7 +40,7 @@
             <div class="profile-section">
                 {% if user_type == 'freelancer' %}
                     <h2>Freelancer Details</h2>
-                    <p><strong>Specialty:</strong> {{ profile.specialty.name }}</p>
+                    <p><strong>Skills:</strong> {{ profile.skills.all|join:", " }}</p>
                     <p><strong>Bio:</strong> {{ profile.bio }}</p>
                     <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
                     <p><strong>Available for Meetings:</strong> {{ profile.available_for_meetings }}</p>
@@ -51,13 +53,17 @@
                             <li><a href="{{ job_link.url }}" target="_blank">{{ job_link.url }}</a></li>
                         {% endfor %}
                     </ul>
-                {% elif user_type == 'employer' %}
-                    <h2>Employer Details</h2>
+                {% elif user_type == 'client' %}
+                    <h2>Client Details</h2>
                     <p><strong>Company Name:</strong> {{ profile.company_name }}</p>
                     <p><strong>Phone Number:</strong> {{ profile.phone_number }}</p>
                     <p><strong>Company Address:</strong> {{ profile.company_address }}</p>
                     <p><strong>VAT Number:</strong> {{ profile.vat_number }}</p>
                     <p><strong>Country:</strong> {{ profile.country }}</p>
+                {% elif user_type == 'employer' %}
+                    <h2>Employer Details</h2>
+                    <p><strong>Staff ID:</strong> {{ profile.staff_id }}</p>
+                    <p><strong>Contact Messages:</strong> Placeholder for contact messages</p>
                 {% endif %}
             </div>
             <div class="profile-section">
@@ -70,6 +76,9 @@
                 {% else %}
                     <p>No active subscription.</p>
                 {% endif %}
+            </div>
+            <div class="profile-actions">
+                <a href="{% url 'profiles:edit_profile' %}" class="btn btn-primary">Edit Profile</a>
             </div>
         </div>
     </div>
