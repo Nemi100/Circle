@@ -5,8 +5,8 @@ from djstripe.models import Customer
 
 class UserProfile(models.Model):
     USER_TYPE_CHOICES = [
-        ('freelancer', 'IT Freelancer'),
-        ('client', 'Client using the services of IT Freelancers'),
+        ('freelancer', 'Freelancer'),
+        ('client', 'Client'),
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES)

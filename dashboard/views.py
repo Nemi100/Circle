@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from subscription.models import Subscription
 from .models import Job, Review, PreviousWork
-from .forms import FreelancerProfileForm, ClientProfileForm, EmployerProfileForm, JobForm, ReviewForm, PreviousWorkForm
+from profiles.forms import FreelancerProfileForm, ClientProfileForm, EmployerProfileForm, JobForm, ReviewForm, PreviousWorkForm
 
 @login_required
 def user_dashboard(request):
@@ -12,36 +12,26 @@ def user_dashboard(request):
         profile = user.employerprofile
         user_type = 'employer'
         template = 'dashboard/employer_dashboard.html'
-        context = {
-            'profile': profile,
-            'user_type': user_type,
-        }
     elif hasattr(user, 'clientprofile'):
         profile = user.clientprofile
         user_type = 'client'
         subscription = Subscription.objects.filter(user=user).first()
         template = 'dashboard/client_dashboard.html'
-        context = {
-            'profile': profile,
-            'user_type': user_type,
-            'subscription': subscription,
-        }
     elif hasattr(user, 'freelancerprofile'):
         profile = user.freelancerprofile
         user_type = 'freelancer'
         subscription = Subscription.objects.filter(user=user).first()
         template = 'dashboard/freelancer_dashboard.html'
-        context = {
-            'profile': profile,
-            'user_type': user_type,
-            'subscription': subscription,
-        }
     else:
         profile = None
+        user_type = None
         template = 'dashboard/dashboard.html'
-        context = {
-            'profile': profile,
-        }
+
+    context = {
+        'profile': profile,
+        'user_type': user_type,
+        'subscription': subscription if user_type in ['client', 'freelancer'] else None,
+    }
 
     return render(request, template, context)
 

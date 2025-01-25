@@ -1,12 +1,41 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
+from allauth.account.views import SignupView
 from .models import FreelancerProfile, ClientProfile, EmployerProfile, Review, Skill, PreviousWork
-from .forms import FreelancerProfileForm, ClientProfileForm, ReviewForm, PreviousWorkForm
+from .forms import FreelancerProfileForm, ClientProfileForm, ReviewForm, PreviousWorkForm, UserTypeForm
 
 def superuser_required(view_func):
     decorated_view_func = login_required(user_passes_test(lambda u: u.is_superuser)(view_func))
     return decorated_view_func
+
+class CustomSignupView(SignupView):
+    template_name = 'account/signup.html'
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        user = self.user
+        self.request.session['just_registered'] = True
+        return redirect('select_user_type')
+
+@login_required
+def select_user_type(request):
+    if request.method == 'POST':
+        form = UserTypeForm(request.POST)
+        if form.is_valid():
+            user_type = form.cleaned_data['user_type']
+            user_profile = request.user.userprofile
+            user_profile.user_type = user_type
+            user_profile.save()
+            if user_type == 'freelancer':
+                FreelancerProfile.objects.create(user=request.user)
+                return redirect('dashboard:user_dashboard')
+            else:
+                ClientProfile.objects.create(user=request.user)
+                return redirect('dashboard:user_dashboard')
+    else:
+        form = UserTypeForm()
+    return render(request, 'profiles/select_user_type.html', {'form': form})
 
 @login_required
 def profile_view(request):
@@ -30,22 +59,11 @@ def profile_view(request):
     })
 
 @login_required
-def edit_profile(request):
-    user = request.user  # Use the currently logged-in user
-    if hasattr(user, 'freelancerprofile'):
-        profile = user.freelancerprofile
+def edit_freelancer_profile(request):
+    profile = request.user.freelancerprofile
+    if request.method == 'POST':
         profile_form = FreelancerProfileForm(request.POST, request.FILES, instance=profile)
         extra_form = PreviousWorkForm(request.POST or None)
-        user_type = 'freelancer'
-    elif hasattr(user, 'clientprofile'):
-        profile = user.clientprofile
-        profile_form = ClientProfileForm(request.POST, request.FILES, instance=profile)
-        user_type = 'client'
-        extra_form = None
-    else:
-        return redirect('profiles:profile')  # Employers cannot edit their own profiles
-
-    if request.method == 'POST':
         if profile_form.is_valid() and (extra_form is None or extra_form.is_valid()):
             profile_form.save()
             if extra_form:
@@ -55,12 +73,28 @@ def edit_profile(request):
             return redirect('profiles:profile')
     else:
         profile_form = FreelancerProfileForm(instance=profile)
+        extra_form = PreviousWorkForm()
 
-    return render(request, 'profiles/edit_profile.html', {
+    return render(request, 'profiles/edit_freelancer_profile.html', {
         'profile_form': profile_form,
         'extra_form': extra_form,
         'profile': profile,
-        'user_type': user_type,
+    })
+
+@login_required
+def edit_client_profile(request):
+    profile = request.user.clientprofile
+    if request.method == 'POST':
+        profile_form = ClientProfileForm(request.POST, request.FILES, instance=profile)
+        if profile_form.is_valid():
+            profile_form.save()
+            return redirect('profiles:client_profile_view')
+    else:
+        profile_form = ClientProfileForm(instance=profile)
+
+    return render(request, 'profiles/edit_client_profile.html', {
+        'profile_form': profile_form,
+        'profile': profile,
     })
 
 @login_required
@@ -74,29 +108,6 @@ def client_profile_view(request):
         user_type = None  # Handle cases where the profile does not exist
 
     return render(request, 'profiles/client_profile.html', {
-        'profile': profile,
-        'user_type': user_type,
-    })
-
-@login_required
-def client_edit_profile(request):
-    user = request.user  # Use the currently logged-in user
-    if hasattr(user, 'clientprofile'):
-        profile = user.clientprofile
-        profile_form = ClientProfileForm(request.POST, request.FILES, instance=profile)
-        user_type = 'client'
-    else:
-        return redirect('profiles:profile')  # Redirect if profile does not exist
-
-    if request.method == 'POST':
-        if profile_form.is_valid():
-            profile_form.save()
-            return redirect('profiles:client_profile_view')
-    else:
-        profile_form = ClientProfileForm(instance=profile)
-
-    return render(request, 'profiles/client_edit_profile.html', {
-        'profile_form': profile_form,
         'profile': profile,
         'user_type': user_type,
     })

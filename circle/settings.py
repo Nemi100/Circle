@@ -21,10 +21,6 @@ STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET')
 DJSTRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET')
 STRIPE_LIVE_MODE = False  # Ensure this is False for test mode
 
-print("STRIPE_PUBLIC_KEY:", STRIPE_PUBLIC_KEY)
-print("STRIPE_SECRET_KEY:", STRIPE_SECRET_KEY)
-print("STRIPE_WEBHOOK_SECRET:", STRIPE_WEBHOOK_SECRET)
-
 
 # Application definition
 INSTALLED_APPS = [
@@ -174,3 +170,6 @@ LOGGING = {
         },
     },
 }
+
+# settings.py
+ACCOUNT_SIGNUP_VIEW = 'profiles.views.CustomSignupView'

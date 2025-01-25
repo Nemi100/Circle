@@ -1,13 +1,14 @@
 from django.urls import path
-from . import views
+from .views import select_user_type, profile_view, edit_freelancer_profile, edit_client_profile, leave_review, manage_employers, client_profile_view
 
 app_name = 'profiles'
 
 urlpatterns = [
-    path('leave-review/<str:freelancer_username>/', views.leave_review, name='leave_review'),
-    path('profile/', views.profile_view, name='profile'),  
-    path('edit-profile/', views.edit_profile, name='edit_profile'),
-    path('manage-employers/', views.manage_employers, name='manage_employers'),  # Example URL for manage_employers
-    path('client-profile/', views.client_profile_view, name='client_profile_view'),  # URL for client profile view
-    path('client-edit-profile/', views.client_edit_profile, name='client_edit_profile'),  # URL for client edit profile
+    path('leave-review/<str:freelancer_username>/', leave_review, name='leave_review'),
+    path('profile/', profile_view, name='profile'),
+    path('profile/edit/freelancer/', edit_freelancer_profile, name='edit_freelancer_profile'),
+    path('profile/edit/client/', edit_client_profile, name='edit_client_profile'),
+    path('manage-employers/', manage_employers, name='manage_employers'),
+    path('select-user-type/', select_user_type, name='select_user_type'),
+    path('client-profile/', client_profile_view, name='client_profile_view'),
 ]

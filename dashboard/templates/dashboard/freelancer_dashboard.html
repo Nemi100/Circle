@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block extra_title %} | Freelancer Dashboard {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <h1>{{ profile.user.username }}'s Dashboard</h1>
+            {% if profile.profile_image %}
+                <img src="{{ profile.profile_image.url }}" alt="{{ profile.user.username }}'s Profile Picture" class="img-fluid rounded-circle" width="150" height="150">
+            {% endif %}
+            <p><strong>Bio:</strong> {{ profile.bio }}</p>
+            <p><strong>Available for Meetings:</strong> {{ profile.available_for_meetings }}</p>
+            <p><strong>Country:</strong> {{ profile.country }}</p>
+            <p><strong>Out of Office:</strong> {{ profile.out_of_office|yesno:"Yes,No" }}</p>
+            <p><strong>LinkedIn Profile:</strong> <a href="{{ profile.linkedin_profile }}" target="_blank">{{ profile.linkedin_profile }}</a></p>
+            <p><strong>Past Jobs Links:</strong></p>
+            <ul>
+                {% for job_link in profile.job_links.all %}
+                    <li><a href="{{ job_link.url }}" target="_blank">{{ job_link.url }}</a></li>
+                {% endfor %}
+            </ul>
+            <h2>Subscription Details</h2>
+            {% if subscription %}
+                <p><strong>Plan:</strong> {{ subscription.plan.name }}</p>
+                <p><strong>Status:</strong> {{ subscription.status }}</p>
+                <p><strong>Start Date:</strong> {{ subscription.start_date }}</p>
+                <p><strong>End Date:</strong> {{ subscription.end_date }}</p>
+            {% else %}
+                <p>No active subscription.</p>
+            {% endif %}
+        </div>
+        <div class="col-md-3">
+            <h3>Actions</h3>
+            <ul class="list-unstyled">
+                <li><a href="{% url 'profiles:edit_freelancer_profile' %}" class="btn btn-primary btn-block">Edit Profile</a></li>
+                <li><a href="{% url 'subscription:subscribe' %}" class="btn btn-secondary btn-block">Subscribe</a></li>
+                <li><a href="{% url 'dashboard:view_profile' username=user.username %}" class="btn btn-info btn-block">View Profile</a></li>
+                <li><a href="#" class="btn btn-success btn-block">Message</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
