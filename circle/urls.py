@@ -2,9 +2,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from profiles.views import CustomSignupView, select_user_type
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/signup/', CustomSignupView.as_view(), name='account_signup'),
+    path('select-user-type/', select_user_type, name='select_user_type'),
     path('accounts/', include('allauth.urls')),
     path('', include('home.urls')),
     path('subscription/', include('subscription.urls', namespace='subscription')),

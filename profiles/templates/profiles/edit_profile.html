@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>Edit Freelancer Profile(profile app)</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ profile_form.as_p }}
+        {% if extra_form %}
+            <h3>Additional Details</h3>
+            {{ extra_form.as_p }}
+        {% endif %}
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+</div>
+{% endblock %}

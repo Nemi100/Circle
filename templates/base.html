@@ -74,17 +74,20 @@
                         </a>
                         <div class="dropdown-menu border-0" aria-labelledby="user-options">
                             {% if request.user.is_authenticated %}
-                                {% if request.user.is_superuser %}
-                                    <a href="" class="dropdown-item">Site Management</a>
-                                {% endif %}
                                 <a href="{% url 'dashboard:user_dashboard' %}" class="dropdown-item">Dashboard</a>
-                                <a href="{% url 'dashboard:view_profile' username=request.user.username %}" class="dropdown-item">View My Profile</a>
+                                {% if not request.user.is_superuser %}
+                                    <a href="{% url 'dashboard:view_profile' username=request.user.username %}" class="dropdown-item">View My Profile</a>
+                                {% endif %}
+                                {% if request.user.is_superuser %}
+                                    <a href="{% url 'admin:index' %}" class="dropdown-item">Site Management</a>
+                                {% endif %}
                                 <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
                             {% else %}
                                 <a href="{% url 'account_signup' %}" class="dropdown-item">Register</a>
                                 <a href="{% url 'account_login' %}" class="dropdown-item">Login</a>
                             {% endif %}
                         </div>
+                        
                     </li>
                 </ul>
             </div>

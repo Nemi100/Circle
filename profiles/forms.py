@@ -1,5 +1,5 @@
 from django import forms
-from profiles.models import FreelancerProfile, ClientProfile, EmployerProfile, Skill, Job, Review, PreviousWork
+from .models import FreelancerProfile, ClientProfile, EmployerProfile, Skill, Job, Review, PreviousWork
 
 class FreelancerProfileForm(forms.ModelForm):
     skills = forms.ModelMultipleChoiceField(
@@ -44,3 +44,11 @@ class PreviousWorkForm(forms.ModelForm):
     class Meta:
         model = PreviousWork
         fields = ['title', 'description', 'link']
+
+
+class UserTypeForm(forms.Form):
+    USER_TYPE_CHOICES = [
+        ('freelancer', 'Freelancer'),
+        ('client', 'Client'),
+    ]
+    user_type = forms.ChoiceField(choices=USER_TYPE_CHOICES, widget=forms.RadioSelect)
