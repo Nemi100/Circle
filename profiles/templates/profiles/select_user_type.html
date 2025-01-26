@@ -2,8 +2,8 @@
 {% load static %}
 {% block content %}
 <div class="container">
-    <h2>Select Your Role</h2>
-    <form method="post" action="{% url 'select_user_type' %}">
+    <h2>Select User Type</h2>
+    <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Continue</button>

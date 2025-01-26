@@ -171,5 +171,4 @@ LOGGING = {
     },
 }
 
-# settings.py
 ACCOUNT_SIGNUP_VIEW = 'profiles.views.CustomSignupView'

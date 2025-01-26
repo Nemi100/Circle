@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import select_user_type, profile_view, edit_freelancer_profile, edit_client_profile, leave_review, manage_employers, client_profile_view
+from .views import select_user_type, profile_view, edit_freelancer_profile, edit_client_profile, leave_review, manage_employers, client_profile_view, update_user_type
+
 
 app_name = 'profiles'
 
@@ -11,4 +12,5 @@ urlpatterns = [
     path('manage-employers/', manage_employers, name='manage_employers'),
     path('select-user-type/', select_user_type, name='select_user_type'),
     path('client-profile/', client_profile_view, name='client_profile_view'),
+    path('update-user-type/', update_user_type, name='update_user_type'),
 ]

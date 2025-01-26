@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container" style="padding-top: 60px;">
+    <h2>User Dashboard</h2>
+    {% if profile_exists %}
+        <p>Welcome back, {{ user.username }}!</p>
+        <!-- Display user profile and subscription info here -->
+    {% else %}
+        <p>You haven't updated your profile yet. Please <a href="{% url 'edit_profile' %}">complete your profile</a>.</p>
+    {% endif %}
+</div>
+{% endblock %}

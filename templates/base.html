@@ -29,7 +29,7 @@
 
     <title>Circle {% block extra_title %}{% endblock %}</title>
   </head>
-  <body>
+  <body class="d-flex flex-column min-vh-100"> <!-- Ensure the body uses flexbox to fill the viewport height -->
     <header class="container-fluid fixed-top">
         <div id="topnav" class="row bg-white pt-lg-2">
             <div class="col-12 col-lg-3 my-auto text-center text-lg-left">
@@ -98,16 +98,18 @@
         </div>
     </header>
     
-    {% if messages %}
-        <div class="message-container">
-        </div>
-    {% endif %}
+    <main class="flex-grow-1">
+        {% if messages %}
+            <div class="message-container">
+            </div>
+        {% endif %}
 
-    {% block page_header %}
-    {% endblock %}
+        {% block page_header %}
+        {% endblock %}
 
-    {% block content %}
-    {% endblock %}
+        {% block content %}
+        {% endblock %}
+    </main>
 
     <footer class="container-fluid bg-light py-4 mt-5">
       <div class="row">
