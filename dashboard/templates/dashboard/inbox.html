@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %} | Inbox {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 60px;">
+    <h2>Inbox</h2>
+    <ul class="list-group">
+        {% for message in messages %}
+            <li class="list-group-item">
+                <a href="{% url 'dashboard:message_detail' message.id %}">
+                    {{ message.subject }} - {{ message.timestamp }}
+                    {% if not message.read %}
+                        <span class="badge badge-warning">New</span>
+                    {% endif %}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

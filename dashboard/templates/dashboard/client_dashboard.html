@@ -24,7 +24,8 @@
                 <li><a href="{% url 'subscription:subscribe' %}" class="btn btn-secondary btn-block">Subscribe</a></li>
                 <li><a href="{% url 'dashboard:view_profile' username=user.username %}" class="btn btn-info btn-block">View Profile</a></li>
                 <li><a href="{% url 'dashboard:post_job' %}" class="btn btn-warning btn-block">Post Job</a></li>
-                <li><a href="#" class="btn btn-success btn-block">Message</a></li>
+                <li><a href="{% url 'dashboard:send_message' %}" class="btn btn-success btn-block">Message</a></li>
+
             </ul>
         </div>
     </div>

@@ -3,6 +3,7 @@ from profiles.models import FreelancerProfile, ClientProfile, EmployerProfile, S
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from .models import Job
+from .models import Message
 
 
 class JobForm(forms.ModelForm):
@@ -88,3 +89,16 @@ class PreviousWorkForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.add_input(Submit('submit', 'Add Work'))
+
+
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['recipient', 'job', 'subject', 'body']
+
+    def __init__(self, *args, **kwargs):
+        super(MessageForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Send Message'))
