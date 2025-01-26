@@ -1,15 +1,26 @@
 from django.db import models
+from django.utils import timezone 
+from django_countries.fields import CountryField
 from profiles.models import FreelancerProfile, Skill, ClientProfile
 
 class Job(models.Model):
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    required_skill = models.ForeignKey(Skill, on_delete=models.SET_NULL, null=True, related_name='dashboard_jobs')
-    website_link = models.URLField(max_length=200, blank=True, null=True)
-    client = models.ForeignKey(ClientProfile, on_delete=models.CASCADE, related_name='dashboard_jobs')
+    client = models.ForeignKey(ClientProfile, on_delete=models.CASCADE)
+    project_title = models.CharField(max_length=100, default='Untitled Project')
+    project_description = models.TextField()
+    project_category = models.CharField(max_length=100, choices=[
+        ('new_website', 'Build a new website'),
+        ('upgrade_website', 'Upgrade my website'),
+        ('redesign_website', 'Redesign my website'),
+    ], default='new_website') 
+    website_link = models.URLField(blank=True, null=True)
+    attachments = models.FileField(upload_to='attachments/', blank=True, null=True)
+    project_budget = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    deadline = models.DateField(default=timezone.now) 
+    required_skills = models.TextField(blank=True, null=True)
+    country = CountryField(default='')
 
     def __str__(self):
-        return self.title
+        return self.project_title
 
 class Review(models.Model):
     rating = models.IntegerField()

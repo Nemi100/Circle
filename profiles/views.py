@@ -1,9 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
-from allauth.account.views import SignupView
+from allauth.account.views import SignupView, ConfirmEmailView
 from .models import FreelancerProfile, ClientProfile, EmployerProfile, Review, Skill, PreviousWork
 from .forms import FreelancerProfileForm, ClientProfileForm, ReviewForm, PreviousWorkForm, UserTypeForm
+from django.urls import reverse
+from dashboard.forms import JobForm
 
 def superuser_required(view_func):
     decorated_view_func = login_required(user_passes_test(lambda u: u.is_superuser)(view_func))
@@ -18,21 +20,24 @@ class CustomSignupView(SignupView):
         self.request.session['just_registered'] = True
         return redirect('select_user_type')
 
+
 @login_required
 def select_user_type(request):
+    user_profile = request.user.userprofile
+    if user_profile.user_type:
+        return redirect('dashboard:user_dashboard')  # Redirect if user type is already set
+
     if request.method == 'POST':
         form = UserTypeForm(request.POST)
         if form.is_valid():
             user_type = form.cleaned_data['user_type']
-            user_profile = request.user.userprofile
             user_profile.user_type = user_type
             user_profile.save()
             if user_type == 'freelancer':
                 FreelancerProfile.objects.create(user=request.user)
-                return redirect('dashboard:user_dashboard')
             else:
                 ClientProfile.objects.create(user=request.user)
-                return redirect('dashboard:user_dashboard')
+            return redirect('dashboard:user_dashboard')
     else:
         form = UserTypeForm()
     return render(request, 'profiles/select_user_type.html', {'form': form})
@@ -56,6 +61,7 @@ def profile_view(request):
     return render(request, 'profiles/profile.html', {
         'profile': profile,
         'user_type': user_type,
+        'profile_exists': profile is not None
     })
 
 @login_required
@@ -131,3 +137,28 @@ def leave_review(request, freelancer_username):
 def manage_employers(request):
     # Superuser functionality to manage employers
     return render(request, 'profiles/manage_employers.html')
+
+
+def custom_404_view(request, exception):
+    return render(request, '404.html', status=404)
+
+@login_required
+def update_user_type(request):
+    user_profile = request.user.userprofile
+    if user_profile.user_type:
+        return redirect('dashboard:user_dashboard')  # Redirect if user type is already set
+
+    if request.method == 'POST':
+        form = UserTypeForm(request.POST, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard:user_dashboard')
+    else:
+        form = UserTypeForm(instance=user_profile)
+    return render(request, 'profiles/update_user_type.html', {'form': form})
+
+
+class CustomConfirmEmailView(ConfirmEmailView):
+    def post(self, *args, **kwargs):
+        response = super().post(*args, **kwargs)
+        return redirect(reverse('profiles:select_user_type'))

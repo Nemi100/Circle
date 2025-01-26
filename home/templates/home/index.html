@@ -5,8 +5,6 @@
     <link rel="stylesheet" href="{% static 'home/css/home.css' %}"> 
 {% endblock %}
 
-
-
 {% block content %}
 <div class="container mt-5 pt-5">
     <div class="jumbotron bg-white text-center my-5">
@@ -26,7 +24,7 @@
             <div class="card mb-4 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">Feature 1</h5>
-                    <p class="card-text">Detail about feature 1 that makes CodeNomad unique and valuable.</p>
+                    <p class="card-text">Detail about feature 1 that makes Circle unique and valuable.</p>
                 </div>
             </div>
         </div>
@@ -42,9 +40,27 @@
             <div class="card mb-4 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">Feature 3</h5>
-                    <p class="card-text">Detail about feature 3 that highlights the community aspect of CodeNomad.</p>
+                    <p class="card-text">Detail about feature 3 that highlights the community aspect of Circle.</p>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Job Listings Section -->
+    <div class="mt-5">
+        <h2 class="text-center mb-4">Latest Job Listings</h2>
+        <div class="row">
+            {% for job in jobs %}
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ job.project_title }}</h5>
+                        <p class="card-text">{{ job.project_description|truncatewords:20 }}</p>
+                        <a href="{{ job.website_link }}" class="btn btn-primary">Project Link</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </div>

@@ -1,13 +1,15 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from subscription.models import Subscription
 from .models import Job, Review, PreviousWork
-from profiles.forms import FreelancerProfileForm, ClientProfileForm, EmployerProfileForm, JobForm, ReviewForm, PreviousWorkForm
+from profiles.forms import FreelancerProfileForm, ClientProfileForm, EmployerProfileForm, ReviewForm, PreviousWorkForm
+from dashboard.forms import JobForm  
+
 
 @login_required
 def user_dashboard(request):
     user = request.user
-    
+
     if hasattr(user, 'employerprofile'):
         profile = user.employerprofile
         user_type = 'employer'
@@ -31,6 +33,7 @@ def user_dashboard(request):
         'profile': profile,
         'user_type': user_type,
         'subscription': subscription if user_type in ['client', 'freelancer'] else None,
+        'profile_exists': profile is not None
     }
 
     return render(request, template, context)
@@ -45,7 +48,7 @@ def view_profile(request, username):
     elif hasattr(user, 'employerprofile'):
         profile = user.employerprofile
     else:
-        profile = None  
+        profile = None
     return render(request, 'dashboard/view_profile.html', {'profile': profile})
 
 @login_required
@@ -87,27 +90,26 @@ def add_profile(request):
 @login_required
 def edit_profile(request):
     user = request.user
-    if hasattr(user, 'freelancerprofile'):
-        profile = user.freelancerprofile
-        form_class = FreelancerProfileForm
-    elif hasattr(user, 'clientprofile'):
+
+    try:
         profile = user.clientprofile
-        form_class = ClientProfileForm
-    else:
-        profile = user.employerprofile
-        form_class = EmployerProfileForm
+        profile_exists = True
+    except ClientProfile.DoesNotExist:
+        profile = None
+        profile_exists = False
 
     if request.method == 'POST':
-        profile_form = form_class(request.POST, request.FILES, instance=profile)
+        profile_form = ClientProfileForm(request.POST, request.FILES, instance=profile)
         if profile_form.is_valid():
             profile_form.save()
             return redirect('dashboard:user_dashboard')
     else:
-        profile_form = form_class(instance=profile)
+        profile_form = ClientProfileForm(instance=profile)
 
     return render(request, 'dashboard/edit_profile.html', {
         'profile_form': profile_form,
-        'profile': profile
+        'profile': profile,
+        'profile_exists': profile_exists
     })
 
 @login_required
@@ -126,16 +128,19 @@ def delete_profile(request):
 
 @login_required
 def post_job(request):
+    if not hasattr(request.user, 'clientprofile'):
+        return redirect('dashboard:user_dashboard')  # Only clients should access this view
+
     if request.method == 'POST':
-        form = JobForm(request.POST)
+        form = JobForm(request.POST, request.FILES)
         if form.is_valid():
             job = form.save(commit=False)
-            job.client = request.user.clientprofile  
+            job.client = request.user.clientprofile
             job.save()
             return redirect('dashboard:user_dashboard')
     else:
         form = JobForm()
-    return render(request, 'jobs/post_job.html', {'form': form})
+    return render(request, 'dashboard/post_job.html', {'form': form})
 
 @login_required
 def review_list(request):
@@ -154,14 +159,6 @@ def review_create(request):
     return render(request, 'dashboard/review_form.html', {'form': form})
 
 @login_required
-def review_delete(request, pk):
-    review = get_object_or_404(Review, pk=pk)
-    if request.method == 'POST':
-        review.delete()
-        return redirect('review_list')
-    return render(request, 'dashboard/review_confirm_delete.html', {'review': review})
-
-@login_required
 def review_update(request, pk):
     review = get_object_or_404(Review, pk=pk)
     if request.method == 'POST':
@@ -172,3 +169,23 @@ def review_update(request, pk):
     else:
         form = ReviewForm(instance=review)
     return render(request, 'dashboard/review_form.html', {'form': form})
+
+@login_required
+def review_delete(request, pk):
+    review = get_object_or_404(Review, pk=pk)
+    if request.method == 'POST':
+        review.delete()
+        return redirect('review_list')
+    return render(request, 'dashboard/review_confirm_delete.html', {'review': review})
+
+@login_required
+def update_user_type(request):
+    user_profile = request.user.userprofile
+    if request.method == 'POST':
+        form = UserTypeForm(request.POST, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard:user_dashboard')  
+    else:
+        form = UserTypeForm(instance=user_profile)
+    return render(request, 'dashboard/update_user_type.html', {'form': form})

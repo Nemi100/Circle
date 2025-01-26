@@ -1,5 +1,6 @@
 from django.shortcuts import render
+from dashboard.models import Job
 
-# Create your views here.
 def index(request):
-    return render(request, 'home/index.html')
+    jobs = Job.objects.all()  
+    return render(request, 'home/index.html', {'jobs': jobs})  

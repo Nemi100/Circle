@@ -42,8 +42,6 @@ class FreelancerProfile(models.Model):
     def __str__(self):
         return self.user.username
 
-from django.db import models
-from profiles.models import FreelancerProfile
 
 class PreviousWork(models.Model):
     profile = models.ForeignKey(FreelancerProfile, on_delete=models.CASCADE, related_name='profiles_previous_works')
