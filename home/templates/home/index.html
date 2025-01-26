@@ -15,10 +15,11 @@
         <div>
             <h4>
                 <a href="#" class="btn shop-now-button py-3 text-uppercase">Get started</a>
+                <a href="{% url 'dashboard:job_listings' %}" class="btn shop-now-button py-3 text-uppercase">View Job Listings</a> 
             </h4>
         </div>
     </div>
-
+    
     <div class="row">
         <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
@@ -43,24 +44,6 @@
                     <p class="card-text">Detail about feature 3 that highlights the community aspect of Circle.</p>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Job Listings Section -->
-    <div class="mt-5">
-        <h2 class="text-center mb-4">Latest Job Listings</h2>
-        <div class="row">
-            {% for job in jobs %}
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ job.project_title }}</h5>
-                        <p class="card-text">{{ job.project_description|truncatewords:20 }}</p>
-                        <a href="{{ job.website_link }}" class="btn btn-primary">Project Link</a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
         </div>
     </div>
 </div>

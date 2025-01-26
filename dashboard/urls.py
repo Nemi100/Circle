@@ -1,18 +1,22 @@
 from django.urls import path
-from .views import user_dashboard, view_profile, add_profile, edit_profile, delete_profile, post_job, review_list, review_create, review_update, review_delete
+from . import views
 
 app_name = 'dashboard'
 
 urlpatterns = [
-    path('dashboard/', user_dashboard, name='user_dashboard'),
-    path('add_profile/', add_profile, name='add_profile'),
-    path('edit_profile/', edit_profile, name='edit_profile'),
-    path('delete_profile/', delete_profile, name='delete_profile'),
-    path('view_profile/<str:username>/', view_profile, name='view_profile'),
-    path('post-job/', post_job, name='post_job'),
-    path('reviews/', review_list, name='review_list'),
-    path('reviews/create/', review_create, name='review_create'),
-    path('reviews/<int:pk>/update/', review_update, name='review_update'),
-    path('reviews/<int:pk>/delete/', review_delete, name='review_delete'),
-
+    path('user-dashboard/', views.user_dashboard, name='user_dashboard'),
+    path('view-profile/<str:username>/', views.view_profile, name='view_profile'),
+    path('add-profile/', views.add_profile, name='add_profile'),
+    path('edit-profile/', views.edit_profile, name='edit_profile'),
+    path('delete-profile/', views.delete_profile, name='delete_profile'),
+    path('post-job/', views.post_job, name='post_job'),
+    path('review-list/', views.review_list, name='review_list'),
+    path('review-create/', views.review_create, name='review_create'),
+    path('review-update/<int:pk>/', views.review_update, name='review_update'),
+    path('review-delete/<int:pk>/', views.review_delete, name='review_delete'),
+    path('update-user-type/', views.update_user_type, name='update_user_type'),
+    path('inbox/', views.inbox, name='inbox'),
+    path('message-detail/<int:message_id>/', views.message_detail, name='message_detail'),
+    path('job-listings/', views.job_listings, name='job_listings'),
+    path('job-detail/<int:job_id>/', views.job_detail, name='job_detail'),  
 ]

@@ -5,7 +5,7 @@ from allauth.account.views import SignupView, ConfirmEmailView
 from .models import FreelancerProfile, ClientProfile, EmployerProfile, Review, Skill, PreviousWork
 from .forms import FreelancerProfileForm, ClientProfileForm, ReviewForm, PreviousWorkForm, UserTypeForm
 from django.urls import reverse
-from dashboard.forms import JobForm
+from dashboard.forms import JobForm, MessageForm
 
 def superuser_required(view_func):
     decorated_view_func = login_required(user_passes_test(lambda u: u.is_superuser)(view_func))
@@ -162,3 +162,19 @@ class CustomConfirmEmailView(ConfirmEmailView):
     def post(self, *args, **kwargs):
         response = super().post(*args, **kwargs)
         return redirect(reverse('profiles:select_user_type'))
+
+
+@login_required
+def send_message_to_user(request, user_id):
+    recipient = get_object_or_404(User, id=user_id)
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender = request.user
+            message.recipient = recipient
+            message.save()
+            return redirect('dashboard:inbox')
+    else:
+        form = MessageForm(initial={'recipient': recipient})
+    return render(request, 'profiles/send_message_to_user.html', {'form': form, 'recipient': recipient})

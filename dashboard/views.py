@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from subscription.models import Subscription
-from .models import Job, Review, PreviousWork
+from .models import Job, Review, PreviousWork, Message
 from profiles.forms import FreelancerProfileForm, ClientProfileForm, EmployerProfileForm, ReviewForm, PreviousWorkForm
-from dashboard.forms import JobForm  
-
+from dashboard.forms import JobForm, MessageForm
+from django.core.paginator import Paginator
+from django.contrib.auth.models import User
 
 @login_required
 def user_dashboard(request):
@@ -38,7 +39,6 @@ def user_dashboard(request):
 
     return render(request, template, context)
 
-@login_required
 def view_profile(request, username):
     user = get_object_or_404(User, username=username)
     if hasattr(user, 'freelancerprofile'):
@@ -185,7 +185,33 @@ def update_user_type(request):
         form = UserTypeForm(request.POST, instance=user_profile)
         if form.is_valid():
             form.save()
-            return redirect('dashboard:user_dashboard')  
+            return redirect('dashboard:user_dashboard')
     else:
         form = UserTypeForm(instance=user_profile)
     return render(request, 'dashboard/update_user_type.html', {'form': form})
+
+@login_required
+def inbox(request):
+    messages = Message.objects.filter(recipient=request.user).order_by('-timestamp')
+    return render(request, 'dashboard/inbox.html', {'messages': messages})
+
+@login_required
+def message_detail(request, message_id):
+    message = get_object_or_404(Message, id=message_id)
+    if message.recipient != request.user:
+        return redirect('dashboard:inbox')
+    message.read = True
+    message.save()
+    return render(request, 'dashboard/message_detail.html', {'message': message})
+
+def job_listings(request):
+    job_list = Job.objects.all().order_by('project_title')  # Order the list by project title or any other relevant field
+    paginator = Paginator(job_list, 10)  # Show 10 jobs per page
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'dashboard/job_listings.html', {'page_obj': page_obj})
+
+def job_detail(request, job_id):
+    job = get_object_or_404(Job, id=job_id)
+    return render(request, 'dashboard/job_detail.html', {'job': job})

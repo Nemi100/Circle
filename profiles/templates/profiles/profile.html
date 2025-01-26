@@ -53,6 +53,7 @@
                             <li><a href="{{ job_link.url }}" target="_blank">{{ job_link.url }}</a></li>
                         {% endfor %}
                     </ul>
+                    **<li><a href="{% url 'profiles:send_message_to_user' profile.user.id %}" class="btn btn-success btn-block">Message</a></li>**  
                 {% elif user_type == 'client' %}
                     <h2>Client Details</h2>
                     <p><strong>Company Name:</strong> {{ profile.company_name }}</p>

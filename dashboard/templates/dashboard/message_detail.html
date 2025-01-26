@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_title %} | Message Detail {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 60px;">
+    <h2>{{ message.subject }}</h2>
+    <p><strong>From:</strong> {{ message.sender.username }}</p>
+    <p><strong>To:</strong> {{ message.recipient.username }}</p>
+    <p><strong>Date:</strong> {{ message.timestamp }}</p>
+    <p>{{ message.body }}</p>
+    {% if message.job %}
+        <p><strong>Job:</strong> <a href="{% url 'dashboard:job_detail' message.job.id %}">{{ message.job.project_title }}</a></p>
+    {% endif %}
+</div>
+{% endblock %}
