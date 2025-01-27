@@ -21,11 +21,10 @@
             <h3>Actions</h3>
             <ul class="list-unstyled">
                 <li><a href="{% url 'profiles:edit_client_profile' %}" class="btn btn-primary btn-block">Edit Profile</a></li>
-                <li><a href="{% url 'subscription:subscribe' %}" class="btn btn-secondary btn-block">Subscribe</a></li>
-                <li><a href="{% url 'dashboard:view_profile' username=user.username %}" class="btn btn-info btn-block">View Profile</a></li>
                 <li><a href="{% url 'dashboard:post_job' %}" class="btn btn-warning btn-block">Post Job</a></li>
-                <li><a href="{% url 'dashboard:send_message' %}" class="btn btn-success btn-block">Message</a></li>
-
+                <li><a href="{% url 'dashboard:inbox' %}" class="btn btn-success btn-block">View Messages</a></li>
+                <li><a href="{% url 'dashboard:delete_job' %}" class="btn btn-danger btn-block">Delete Job</a></li>
+                <li><a href="{% url 'dashboard:delete_account' %}" class="btn btn-danger btn-block">Delete Account</a></li>
             </ul>
         </div>
     </div>

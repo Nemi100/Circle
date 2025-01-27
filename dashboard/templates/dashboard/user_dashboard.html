@@ -6,9 +6,23 @@
     <h2>User Dashboard</h2>
     {% if profile_exists %}
         <p>Welcome back, {{ user.username }}!</p>
+        
         <!-- Display user profile and subscription info here -->
+        <div class="notifications">
+            {% if unread_messages %}
+                <div class="alert alert-info">
+                    You have {{ unread_messages }} unread message{{ unread_messages|pluralize }}.
+                    <a href="{% url 'dashboard:inbox' %}" class="btn btn-sm btn-primary ml-2">View Messages</a>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    No new messages.
+                </div>
+            {% endif %}
+        </div>
+        
     {% else %}
-        <p>You haven't updated your profile yet. Please <a href="{% url 'edit_profile' %}">complete your profile</a>.</p>
+        <p>You haven't updated your profile yet. Please <a href="{% url 'dashboard:edit_profile' %}">complete your profile</a>.</p>
     {% endif %}
 </div>
 {% endblock %}

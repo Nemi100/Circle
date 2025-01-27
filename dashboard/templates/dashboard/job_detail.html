@@ -17,7 +17,7 @@
     <p><strong>Required Skills:</strong> {{ job.required_skills }}</p>
     <p><strong>Country:</strong> {{ job.country.name }}</p>
     {% if user.is_authenticated %}
-        <a href="{% url 'profiles:send_message_to_user' job.client.user.id %}" class="btn btn-success">Message Client</a>
+        <a href="{% url 'dashboard:send_message_to_user' job.id %}" class="btn btn-success">Message Client</a>
     {% else %}
         <p>Please <a href="{% url 'login' %}">log in</a> to message the client.</p>
     {% endif %}

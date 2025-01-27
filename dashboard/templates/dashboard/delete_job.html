@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block extra_title %} | Delete Job {% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 60px;">
+    <h2>Delete Job</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="job_id">Select Job to Delete:</label>
+            <select name="job_id" id="job_id" class="form-control">
+                {% for job in jobs %}
+                <option value="{{ job.id }}">{{ job.project_title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-danger">Delete Job</button>
+    </form>
+</div>
+{% endblock %}

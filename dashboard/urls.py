@@ -1,11 +1,12 @@
 from django.urls import path
 from . import views
+from profiles.views import view_profile  
 
 app_name = 'dashboard'
 
 urlpatterns = [
     path('user-dashboard/', views.user_dashboard, name='user_dashboard'),
-    path('view-profile/<str:username>/', views.view_profile, name='view_profile'),
+    path('view-profile/<str:username>/', view_profile, name='view_profile'),  
     path('add-profile/', views.add_profile, name='add_profile'),
     path('edit-profile/', views.edit_profile, name='edit_profile'),
     path('delete-profile/', views.delete_profile, name='delete_profile'),
@@ -17,6 +18,9 @@ urlpatterns = [
     path('update-user-type/', views.update_user_type, name='update_user_type'),
     path('inbox/', views.inbox, name='inbox'),
     path('message-detail/<int:message_id>/', views.message_detail, name='message_detail'),
+    path('send-message/<int:job_id>/', views.send_message_to_user, name='send_message_to_user'),
     path('job-listings/', views.job_listings, name='job_listings'),
-    path('job-detail/<int:job_id>/', views.job_detail, name='job_detail'),  
+    path('job-detail/<int:job_id>/', views.job_detail, name='job_detail'),
+    path('delete-job/', views.delete_job, name='delete_job'),
+    path('delete-account/', views.delete_account, name='delete_account'),
 ]

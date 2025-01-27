@@ -5,7 +5,8 @@ from allauth.account.views import SignupView, ConfirmEmailView
 from .models import FreelancerProfile, ClientProfile, EmployerProfile, Review, Skill, PreviousWork
 from .forms import FreelancerProfileForm, ClientProfileForm, ReviewForm, PreviousWorkForm, UserTypeForm
 from django.urls import reverse
-from dashboard.forms import JobForm, MessageForm
+from dashboard.forms import JobForm
+from dashboard.models import Job 
 
 def superuser_required(view_func):
     decorated_view_func = login_required(user_passes_test(lambda u: u.is_superuser)(view_func))
@@ -19,7 +20,6 @@ class CustomSignupView(SignupView):
         user = self.user
         self.request.session['just_registered'] = True
         return redirect('select_user_type')
-
 
 @login_required
 def select_user_type(request):
@@ -69,23 +69,29 @@ def edit_freelancer_profile(request):
     profile = request.user.freelancerprofile
     if request.method == 'POST':
         profile_form = FreelancerProfileForm(request.POST, request.FILES, instance=profile)
-        extra_form = PreviousWorkForm(request.POST or None)
-        if profile_form.is_valid() and (extra_form is None or extra_form.is_valid()):
+        if profile_form.is_valid():
+            # Check if 'first_name' and 'last_name' exist in cleaned_data
+            first_name = profile_form.cleaned_data.get('first_name')
+            last_name = profile_form.cleaned_data.get('last_name')
+            if first_name and last_name:
+                profile.user.first_name = first_name
+                profile.user.last_name = last_name
+                profile.user.save()
+
             profile_form.save()
-            if extra_form:
-                extra_work = extra_form.save(commit=False)
-                extra_work.profile = profile
-                extra_work.save()
             return redirect('profiles:profile')
     else:
-        profile_form = FreelancerProfileForm(instance=profile)
-        extra_form = PreviousWorkForm()
+        # Initializes the form with the user's first and last name
+        profile_form = FreelancerProfileForm(
+            instance=profile, 
+            initial={'first_name': profile.user.first_name, 'last_name': profile.user.last_name}
+        )
 
     return render(request, 'profiles/edit_freelancer_profile.html', {
         'profile_form': profile_form,
-        'extra_form': extra_form,
         'profile': profile,
     })
+
 
 @login_required
 def edit_client_profile(request):
@@ -138,7 +144,6 @@ def manage_employers(request):
     # Superuser functionality to manage employers
     return render(request, 'profiles/manage_employers.html')
 
-
 def custom_404_view(request, exception):
     return render(request, '404.html', status=404)
 
@@ -157,24 +162,26 @@ def update_user_type(request):
         form = UserTypeForm(instance=user_profile)
     return render(request, 'profiles/update_user_type.html', {'form': form})
 
-
 class CustomConfirmEmailView(ConfirmEmailView):
     def post(self, *args, **kwargs):
         response = super().post(*args, **kwargs)
         return redirect(reverse('profiles:select_user_type'))
 
 
+
 @login_required
-def send_message_to_user(request, user_id):
-    recipient = get_object_or_404(User, id=user_id)
-    if request.method == 'POST':
-        form = MessageForm(request.POST)
-        if form.is_valid():
-            message = form.save(commit=False)
-            message.sender = request.user
-            message.recipient = recipient
-            message.save()
-            return redirect('dashboard:inbox')
+def view_profile(request, username):
+    user = get_object_or_404(User, username=username)
+    
+    if hasattr(user, 'freelancerprofile'):
+        profile = user.freelancerprofile
+    elif hasattr(user, 'clientprofile'):
+        profile = user.clientprofile
+    elif hasattr(user, 'employerprofile'):
+        profile = user.employerprofile
     else:
-        form = MessageForm(initial={'recipient': recipient})
-    return render(request, 'profiles/send_message_to_user.html', {'form': form, 'recipient': recipient})
+        profile = None
+    
+    return render(request, 'dashboard/view_profile.html', {'profile': profile})
+
+
