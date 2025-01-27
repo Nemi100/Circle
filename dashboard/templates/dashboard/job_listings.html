@@ -4,16 +4,16 @@
 {% block extra_title %} | Job Listings {% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/job_listings.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="container mt-5">
     <h1 class="mb-4">Job Listings</h1>
-    <div class="row">
+    <div class="row d-flex flex-wrap">
         {% for job in page_obj %}
-            <div class="col-md-4 mb-4">
-                <div class="card">
+            <div class="col-md-4 mb-4 d-flex align-items-stretch">
+                <div class="card w-100">
                     <div class="card-body">
                         <h5 class="card-title">{{ job.project_title }}</h5>
                         <p class="card-text">{{ job.project_description|truncatewords:20 }}</p>

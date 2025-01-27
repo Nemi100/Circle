@@ -12,7 +12,7 @@
     <h2>Inbox</h2>
     <ul class="list-group">
         {% for message in messages %}
-            <li class="list-group-item">
+            <li class="list-group-item {% if not message.read %}list-group-item-warning{% endif %}">
                 <a href="{% url 'dashboard:message_detail' message.id %}">
                     {{ message.subject }} - {{ message.timestamp }}
                     {% if not message.read %}

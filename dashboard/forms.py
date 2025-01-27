@@ -1,9 +1,8 @@
 from django import forms
-from profiles.models import FreelancerProfile, ClientProfile, EmployerProfile, Skill, Job, Review, PreviousWork
+from profiles.models import FreelancerProfile, ClientProfile, EmployerProfile, Skill, JobLink, Review, PreviousWork
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
-from .models import Job
-from .models import Message
+from dashboard.models import Job, Message
 
 
 class JobForm(forms.ModelForm):
@@ -22,8 +21,15 @@ class JobForm(forms.ModelForm):
         self.helper.add_input(Submit('submit', 'Post Job'))
 
 class FreelancerProfileForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=30, required=True)
+    last_name = forms.CharField(max_length=30, required=True)
     skills = forms.ModelMultipleChoiceField(
         queryset=Skill.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+    past_work_links = forms.ModelMultipleChoiceField(
+        queryset=JobLink.objects.all(),
         widget=forms.CheckboxSelectMultiple,
         required=False
     )
@@ -31,8 +37,9 @@ class FreelancerProfileForm(forms.ModelForm):
     class Meta:
         model = FreelancerProfile
         fields = [
-            'user', 'skills', 'bio', 'phone_number', 'available_for_meetings',
-            'country', 'out_of_office', 'linkedin_profile', 'profile_image'
+            'user', 'first_name', 'last_name', 'skills', 'bio', 'phone_number',
+            'available_for_meetings', 'country', 'out_of_office', 'linkedin_profile',
+            'profile_image', 'past_work_links'
         ]
 
     def __init__(self, *args, **kwargs):
@@ -90,15 +97,27 @@ class PreviousWorkForm(forms.ModelForm):
         self.helper.form_method = 'post'
         self.helper.add_input(Submit('submit', 'Add Work'))
 
-
-
 class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
-        fields = ['recipient', 'job', 'subject', 'body']
+        fields = ['subject', 'body', 'sender', 'recipient']
+        widgets = {
+            'sender': forms.HiddenInput(),
+            'recipient': forms.HiddenInput(),
+        }
 
     def __init__(self, *args, **kwargs):
+        sender = kwargs.pop('sender', None)
+        recipient = kwargs.pop('recipient', None)
+        subject = kwargs.pop('subject', None)
         super(MessageForm, self).__init__(*args, **kwargs)
+        if sender:
+            self.fields['sender'].initial = sender.id
+        if recipient:
+            self.fields['recipient'].initial = recipient.id
+        if subject:
+            self.fields['subject'].initial = subject
+
         self.helper = FormHelper()
         self.helper.form_method = 'post'
         self.helper.add_input(Submit('submit', 'Send Message'))

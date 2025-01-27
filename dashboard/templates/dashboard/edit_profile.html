@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block extra_title %} | Edit Profile {% endblock %}
 
@@ -35,7 +36,7 @@
     <div class="container profile-overlay">
         <div class="row">
             <div class="col text-center">
-                <h2 class="logo-font mb-4">Edit Profile(dashboard app)</h2>
+                <h2 class="logo-font mb-4">Edit Profile (dashboard app)</h2>
                 <hr>
             </div>
         </div>
@@ -44,15 +45,9 @@
                 <div class="form-container">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {{ profile_form.as_p }}
-                        <h3>Add Job Links (1-5)</h3>
-                        {% for job_link_form in job_link_forms %}
-                            {{ job_link_form.as_p }}
-                        {% endfor %}
-                        <button type="submit">Save</button>
+                        {{ profile_form|crispy }}
+                        <button type="submit" class="btn btn-primary">Save</button>
                     </form>
-                    
-                    
                 </div>
             </div>
         </div>
