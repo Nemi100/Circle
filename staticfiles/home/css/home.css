@@ -1,0 +1,92 @@
+/* General Settings */
+body {
+    background-color: #ffffff; /* Glossy white background */
+    color: #666; /* Grey text */
+}
+
+/* Header Container */
+.header-container {
+    background-color: #f0f0f0; /* Light grey */
+    padding-top: 40px;
+}
+
+/* Jumbotron */
+.jumbotron {
+    background: url("{% static 'home/img/home_img.jpg' %}") no-repeat center center;
+    background-size: cover;
+    color: rgb(37, 36, 36);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.jumbotron h1, .jumbotron p, .jumbotron .btn {
+    color: rgb(175, 56, 56);
+}
+
+/* Headings and Lead Text */
+h1, h4, .lead {
+    color: #666; /* Grey text */
+}
+
+/* Primary Button */
+.btn-primary {
+    background-color: #666; /* Grey */
+    border-color: #666;
+}
+
+.btn-primary:hover {
+    background-color: #999; /* Lighter grey on hover */
+    border-color: #999;
+}
+
+/* Card Styling */
+.card {
+    border-color: #ccc; /* Light grey */
+    display: flex; /* Enable Flexbox */
+    flex-direction: column; /* Arrange items in column */
+    justify-content: space-between; /* Space items evenly */
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    margin: 10px;
+}
+
+.card-title {
+    color: #666; /* Grey text */
+}
+
+.card-text {
+    color: #666; /* Grey text */
+}
+
+/* Flexbox Container for Cards */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: stretch;
+    margin-top: -100px; /* Adjust this value as needed */
+}
+
+/* Links */
+a {
+    color: #666; /* Grey text */
+}
+
+a:hover {
+    color: #999; /* Lighter grey on hover */
+}
+
+/* Shop Now Button */
+.shop-now-button {
+    background-color: #666; /* Grey */
+    border-color: #666;
+    color: #ffffff;
+}
+
+.shop-now-button:hover {
+    background-color: #999; /* Lighter grey on hover */
+    border-color: #999;
+}

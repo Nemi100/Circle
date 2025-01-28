@@ -6,7 +6,7 @@ app_name = 'profiles'
 
 urlpatterns = [
     path('leave-review/<str:freelancer_username>/', leave_review, name='leave_review'),
-    path('profile/', view_profile, name='profile'), 
+    path('profile/<str:username>/', view_profile, name='view_profile'), 
     path('profile/edit/freelancer/', edit_freelancer_profile, name='edit_freelancer_profile'),
     path('profile/edit/client/', edit_client_profile, name='edit_client_profile'),
     path('manage-employers/', manage_employers, name='manage_employers'),

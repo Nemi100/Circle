@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from allauth.account.views import SignupView, ConfirmEmailView
 from .models import FreelancerProfile, ClientProfile, EmployerProfile, Review, Skill, PreviousWork
-from .forms import FreelancerProfileForm, ClientProfileForm, ReviewForm, PreviousWorkForm, UserTypeForm
+from .forms import FreelancerProfileForm, ClientProfileForm, ReviewForm, PreviousWorkForm, UserTypeForm, EmployerProfileForm
 from django.urls import reverse
 from dashboard.forms import JobForm
 from dashboard.models import Job 
@@ -56,13 +56,28 @@ def profile_view(request):
         user_type = 'employer'
     else:
         profile = None
-        user_type = None  # Handle cases where the profile does not exist
+        user_type = None
 
-    return render(request, 'profiles/profile.html', {
+    context = {
         'profile': profile,
         'user_type': user_type,
-        'profile_exists': profile is not None
-    })
+        'profile_exists': profile is not None,
+        'include_media': True
+    }
+
+    if profile:
+        if user_type == 'freelancer':
+            profile_form = FreelancerProfileForm(instance=profile)
+            context['profile_form'] = profile_form
+        elif user_type == 'client':
+            profile_form = ClientProfileForm(instance=profile)
+            context['profile_form'] = profile_form
+        elif user_type == 'employer':
+            profile_form = EmployerProfileForm(instance=profile)
+            context['profile_form'] = profile_form
+
+    return render(request, 'profiles/profile.html', context)
+
 
 @login_required
 def edit_freelancer_profile(request):
@@ -79,7 +94,7 @@ def edit_freelancer_profile(request):
                 profile.user.save()
 
             profile_form.save()
-            return redirect('profiles:profile')
+            return redirect('profiles:view_profile', username=request.user.username)
     else:
         # Initializes the form with the user's first and last name
         profile_form = FreelancerProfileForm(

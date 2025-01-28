@@ -23,14 +23,18 @@
                     {% endif %}
                 </div>
                 <div class="profile-info">
+                    {% if profile %}
                     <h1>{{ profile.user.username }}</h1>
-                    {% if user_type == 'freelancer' %}
+                    {% if user_type == 'freelancer' and profile.skills %}
                         <p>{{ profile.skills.all|join:", " }}</p>
-                    {% elif user_type == 'client' %}
+                    {% elif user_type == 'client' and profile.company_name %}
                         <p>{{ profile.company_name }}</p>
-                    {% elif user_type == 'employer' %}
+                    {% elif user_type == 'employer' and profile.staff_id %}
                         <p>Staff ID: {{ profile.staff_id }}</p>
                     {% endif %}
+                {% else %}
+                    <p>No profile available.</p>
+                {% endif %}
                 </div>
             </div>
         </div>

@@ -1,47 +1,55 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block extra_css %} 
-    <link rel="stylesheet" href="{% static 'home/css/home.css' %}"> 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'home/css/home.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5 pt-5">
-    <div class="jumbotron bg-white text-center my-5">
-        <h1 class="display-4 logo-font">Welcome to Circle!</h1>
-        <p class="lead">Connecting Visionaries with Tech Wizards</p>
-        <hr class="my-4">
-        <p>Post a Job & One of Our Tech Experts Will Get In Touch Shortly.</p>
-        <div>
-            <h4>
-                <a href="#" class="btn shop-now-button py-3 text-uppercase">Get started</a>
-                <a href="{% url 'dashboard:job_listings' %}" class="btn shop-now-button py-3 text-uppercase">View Job Listings</a> 
-            </h4>
+<div class="container-fluid p-0">
+    <div class="jumbotron">
+        
+        <div class="content-card p-4">
+            <h1 class="display-4 logo-font">Welcome to Circle</h1>
+            <p class="lead">Connecting Visionaries with Tech Wizards</p>
+            <hr class="my-4">
+            <p>Post a Job & One of Our Tech Experts Will Get In Touch Shortly.</p>
+            <div>
+                <h4>
+                    <a href="#" class="btn shop-now-button py-3 text-uppercase">Get Started</a>
+                    <a href="{% url 'dashboard:job_listings' %}" class="btn shop-now-button py-3 text-uppercase">View Job Listings</a> 
+                </h4>
+            </div>
         </div>
     </div>
-    
-    <div class="row">
-        <div class="col-md-4">
-            <div class="card mb-4 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Feature 1</h5>
-                    <p class="card-text">Detail about feature 1 that makes Circle unique and valuable.</p>
+
+    <div class="container card-container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Top Tech Wizards Board</h5>
+                        <p class="card-text">Our Top Tech Wizards are revolutionists, creating new websites/apps and supporting virtual business spaces, all while earning extra income.</p>
+                        <a href="#" class="btn btn-primary"><i class="fas fa-user"></i> Learn More</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card mb-4 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Feature 2</h5>
-                    <p class="card-text">Detail about feature 2 that enhances user experience and benefits.</p>
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">How It Works</h5>
+                        <p class="card-text">Sign up, access an interactive dashboard to post jobs and receive messages. Set your budget and provide detailed requirements.</p>
+                        <a href="#" class="btn btn-primary"><i class="fas fa-info-circle"></i>Learn More</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card mb-4 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Feature 3</h5>
-                    <p class="card-text">Detail about feature 3 that highlights the community aspect of Circle.</p>
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Community</h5>
+                        <p class="card-text">Join a vibrant community of visionaries and tech experts, collaborating to bring ideas to life.</p>
+                        <a href="#" class="btn btn-primary"><i class="fas fa-users"></i>Join Now</a>
+                    </div>
                 </div>
             </div>
         </div>

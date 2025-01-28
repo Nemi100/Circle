@@ -1,5 +1,3 @@
-/* home.css */
-
 /* General Settings */
 body {
     background-color: #ffffff; /* Glossy white background */
@@ -14,10 +12,30 @@ body {
 
 /* Jumbotron */
 .jumbotron {
-    background-color: #f8f8f8; /* Slightly lighter grey */
-    margin: 0 auto; /* Center the jumbotron */
-    width: 80%; /* Increase the width for a bigger jumbotron */
-    padding: 2rem; /* Add padding for more content space */
+    background: url("http://localhost:8000/static/home/img/home_img.jpg") no-repeat center center;
+    background-size: cover;
+    color: rgb(37, 36, 36);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+
+.content-card {
+    background: rgba(255, 255, 255, 0.6); /* Semi-transparent white */
+    border-radius: 10px;
+    backdrop-filter: blur(10px); /* Blurring effect */
+    padding: 2rem;
+    max-width: 600px; /* Adjust the width as needed */
+    margin: auto;
+    z-index: 1;
+}
+
+
+.jumbotron h1, .jumbotron p, .jumbotron .btn {
+    color: rgb(28, 26, 26);
 }
 
 /* Headings and Lead Text */
@@ -39,6 +57,12 @@ h1, h4, .lead {
 /* Card Styling */
 .card {
     border-color: #ccc; /* Light grey */
+    display: flex; /* Enable Flexbox */
+    flex-direction: column; /* Arrange items in column */
+    justify-content: space-between; /* Space items evenly */
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    margin: 10px;
 }
 
 .card-title {
@@ -47,6 +71,15 @@ h1, h4, .lead {
 
 .card-text {
     color: #666; /* Grey text */
+}
+
+/* Flexbox Container for Cards */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: stretch;
+    margin-top: -100px; /* Adjust this value as needed */
 }
 
 /* Links */
