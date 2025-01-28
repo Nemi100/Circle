@@ -1,121 +1,166 @@
+/* General Settings */
 html, body {
     height: 100%;
     margin: 0;
+    color: #666; /* Grey text */
+    font-family: 'Lato', sans-serif;
+    display: flex;
+    flex-direction: column;
 }
 
+
+body {
+    background-color: #ffffff; /* Glossy white background */
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Container Styling */
+.container {
+    max-width: 900px;
+    background: #ffffff; /* Glossy white background */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    color: #666; /* Grey text */
+}
+
+/* Profile Header */
+.profile-header .d-flex {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-header h1 {
+    font-size: 2.5em;
+    color: #666; /* Grey text */
+    margin-left: 20px;
+}
+
+/* Profile Section */
+.profile-section h2 {
+    margin-top: 30px;
+    font-size: 1.8em;
+    color: #666; /* Grey text */
+}
+
+.profile-section p {
+    margin: 10px 0;
+    line-height: 1.6;
+    color: #666; /* Grey text */
+}
+
+/* Profile Image */
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Profile Section Links */
+.profile-section a {
+    color: #666; /* Grey text */
+    text-decoration: none;
+}
+
+.profile-section a:hover {
+    text-decoration: underline;
+}
+
+/* Navbar Styling */
 header .navbar-nav .nav-item .nav-link {
     padding: 10px 15px;
     font-weight: bold;
-    color: #333;
+    color: #666; /* Grey text */
 }
 
 header .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+    background-color: #666; /* Grey text */
+    border-color: #666;
 }
 
-#topnav {
-    padding: 10px 0;
+header {
+    padding-bottom: 20px;
 }
 
-#delivery-banner {
-    margin-top: 10px;
+/* Button Styling */
+.btn {
+    margin-top: 1rem;
 }
 
-body {
-    color: #555;
-    font-family: 'Lato', sans-serif;
+.btn-primary {
+    background-color: #666; /* Grey text */
+    border-color: #666;
+}
+
+.btn-outline-primary {
+    color: #666; /* Grey text */
+    border-color: #666;
+}
+
+.btn-outline-primary:hover {
+    background-color: #666; /* Grey text */
+    color: #fff;
+}
+
+/* Footer Styling */
+footer {
+    background-color: #ffffff; /* Glossy white background */
+    color: #666; /* Grey text */
+    padding: 2rem;
+    text-align: center;
+    width: 100%;
+    margin-top: auto;
+    box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.1);
+}
+
+footer .footer-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+}
+
+footer .footer-content .column {
+    flex: 1;
+    padding: 1rem;
+}
+
+footer .footer-content .social-icons {
     display: flex;
     justify-content: center;
-    align-items: center;
+    gap: 1rem;
 }
 
-.jumbotron {
-    background: rgba(255, 255, 255, 0.8); 
+footer .footer-content .social-icons a {
+    color: #666; /* Grey text */
+    text-decoration: none;
+    font-size: 1.5rem;
+}
+
+footer .footer-content .social-icons a:hover {
+    color: #999; /* Lighter grey on hover */
+}
+
+.footer-bottom {
+    margin-top: 1rem;
+    border-top: 1px solid #666; /* Grey border */
+    padding-top: 1rem;
+    width: 100%;
+    text-align: center;
+}
+
+/* Container and Overlay Padding */
+.container, .profile-overlay, .dashboard-overlay, .pricing-table {
     padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    width: 80%;
-    max-width: 700px;
-    color: #fff;
-    backdrop-filter: blur(10px);
 }
 
-.text-uppercase {
-    text-transform: uppercase;
-}
-
-/* Icon Styles */
-.icon {
-    align-items: center;
-    display: inline-flex;
-    justify-content: center;
-    height: 1.5rem;
-    width: 1.5rem;
-}
-
-/* Logo Styles */
-.logo-font {
-    text-transform: uppercase;
-}
-
-.main-logo-link {
-    width: fit-content;
-}
-
-/* Button Styles */
-.shop-now-button,
-.btn-black {
-    background: black;
-    color: white;
-    min-width: 260px;
-}
-
-.shop-now-button:hover,
-.shop-now-button:active,
-.shop-now-button:focus,
-.btn-black:hover,
-.btn-black:active,
-.btn-black:focus {
-    background: #222;
-    color: white;
-}
-
-/* Text and Border Styles */
-.text-black {
-    color: #000 !important;
-}
-
-.border-black {
-    border: 1px solid black !important;
-}
-
-/* Media Queries */
-/* Slightly larger container on xl screens */
-@media (min-width: 1200px) {
-    .container {
-        max-width: 80%;
+@media (max-width: 768px) {
+    .container, .profile-overlay, .dashboard-overlay, .pricing-table {
+        padding: 1rem;
     }
-}
-
-/* fixed top navbar only on medium and up */
-@media (min-width: 992px) {
-    .fixed-top-desktop-only {
-        position: fixed;
-        top: 0;
-        right: 0;
-        left: 0;
-        z-index: 1030;
-    }
-
-    .header-container {
-        padding-top: 164px;
-    }
-}
-
-/* Accessibility */
-.shop-now-button:focus,
-.btn-black:focus {
-    outline: 2px solid #fff;
-    outline-offset: 2px;
 }

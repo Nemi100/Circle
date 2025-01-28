@@ -37,7 +37,8 @@ def user_dashboard(request):
         'user_type': user_type,
         'subscription': subscription if user_type in ['client', 'freelancer'] else None,
         'profile_exists': profile is not None,
-        'unread_messages': unread_messages
+        'unread_messages': unread_messages,
+        'include_media': True
     }
 
     return render(request, template, context)

@@ -8,6 +8,7 @@ html, body {
     flex-direction: column;
 }
 
+
 body {
     background-color: #ffffff; /* Glossy white background */
     min-height: 100vh;
