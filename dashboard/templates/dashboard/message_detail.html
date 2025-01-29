@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block extra_title %} | Message Detail {% endblock %}
 
 {% block extra_css %}
@@ -8,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container" style="padding-top: 60px;">
+<div class="container common-body content-spacing message-detail">
     <h2>{{ message.subject }}</h2>
     <p><strong>From:</strong> {{ message.sender.username }}</p>
     <p><strong>To:</strong> {{ message.recipient.username }}</p>
@@ -22,7 +21,7 @@
     <!-- Reply Form -->
     <div class="reply-form mt-4">
         <h4>Reply to Message</h4>
-        <form method="post">
+        <form method="post" action="{% url 'dashboard:message_detail' message.id %}">
             {% csrf_token %}
             {{ reply_form|crispy }}
             <button type="submit" class="btn btn-primary">Send Reply</button>

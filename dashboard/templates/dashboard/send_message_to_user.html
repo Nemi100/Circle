@@ -9,9 +9,9 @@
 {% endblock %}
 
 {% block content %}
-<div class="container" style="padding-top: 60px;">
+<div class="container common-body content-spacing send-message">
     <h2>Send Message to {{ recipient.username }}</h2>
-    <form method="post">
+    <form method="post" >
         {% csrf_token %}
         {{ form|crispy }}
         <button type="submit" class="btn btn-primary">Send Message</button>

@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block extra_title %} | {{ form.instance.pk|yesno:"Edit Review,Add a Review" }} {% endblock %}
 
 {% block extra_css %}
@@ -9,7 +8,7 @@
 
 {% block content %}
 <div class="overlay"></div>
-<div class="container profile-overlay">
+<div class="container common-body content-spacing profile-overlay">
     <h2 class="logo-font mb-4">{{ form.instance.pk|yesno:"Edit Review,Add a Review" }}</h2>
     <hr>
     <form method="post">

@@ -6,34 +6,11 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
-    <style>
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.9); 
-            z-index: -1; 
-        }
-        .profile-overlay {
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); 
-            margin: 20px auto;
-            max-width: 800px;
-            position: relative; 
-            z-index: 1;
-        }
-        .form-container {
-            padding: 2rem;
-        }
-    </style>
 {% endblock %}
 
 {% block content %}
     <div class="overlay"></div>
-    <div class="container profile-overlay">
+    <div class="container common-body content-spacing profile-overlay">
         <div class="row">
             <div class="col text-center">
                 <h2 class="logo-font mb-4">Edit Profile (dashboard app)</h2>

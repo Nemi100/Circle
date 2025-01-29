@@ -1,8 +1,14 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block extra_title %} | Delete Job {% endblock %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="container" style="padding-top: 60px;">
+<div class="container common-body content-spacing delete-job-container">
     <h2>Delete Job</h2>
     <form method="post">
         {% csrf_token %}

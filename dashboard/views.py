@@ -186,7 +186,7 @@ def update_user_type(request):
 def inbox(request):
     messages = Message.objects.filter(recipient=request.user).order_by('-timestamp')
     no_new_messages = not messages.exists()
-    return render(request, 'dashboard/inbox.html', {'messages': messages})
+    return render(request, 'dashboard/inbox.html', {'messages': messages,'no_new_messages': no_new_messages})
 
 @login_required
 def message_detail(request, message_id):
@@ -195,7 +195,20 @@ def message_detail(request, message_id):
         return redirect('dashboard:inbox')
     message.read = True
     message.save()
-    return render(request, 'dashboard/message_detail.html', {'message': message})
+
+    if request.method == 'POST':
+        reply_form = MessageForm(request.POST, sender=request.user, recipient=message.sender, subject=f"Re: {message.subject}")
+        if reply_form.is_valid():
+            reply_message = reply_form.save(commit=False)
+            reply_message.sender = request.user
+            reply_message.recipient = message.sender
+            reply_message.save()
+            return redirect('dashboard:message_detail', message_id=message.id)
+    else:
+        reply_form = MessageForm(sender=request.user, recipient=message.sender, subject=f"Re: {message.subject}")
+
+    return render(request, 'dashboard/message_detail.html', {'message': message, 'reply_form': reply_form})
+
 
 @login_required
 def send_message_to_user(request, job_id):

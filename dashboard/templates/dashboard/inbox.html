@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block extra_title %} | Inbox {% endblock %}
 
 {% block extra_css %}
@@ -8,19 +7,24 @@
 {% endblock %}
 
 {% block content %}
-<div class="container" style="padding-top: 60px;">
-    <h2>Inbox</h2>
-    <ul class="list-group">
-        {% for message in messages %}
-            <li class="list-group-item {% if not message.read %}list-group-item-warning{% endif %}">
-                <a href="{% url 'dashboard:message_detail' message.id %}">
-                    {{ message.subject }} - {{ message.timestamp }}
-                    {% if not message.read %}
-                        <span class="badge badge-warning">New</span>
-                    {% endif %}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
+<div class="container common-body content-spacing inbox-container center-content">
+    <h2 class="inbox-header logo-font">Inbox</h2>
+    {% if no_new_messages %}
+        <p>No messages in your inbox.</p>
+    {% else %}
+        <ul class="message-list">
+            {% for message in messages %}
+                <li class="message-item {% if not message.read %}list-group-item-warning{% endif %}">
+                    <a href="{% url 'dashboard:message_detail' message.id %}">
+                        <span>{{ message.subject }}</span>
+                        <span>{{ message.timestamp }}</span>
+                        {% if not message.read %}
+                            <span class="badge badge-warning">New</span>
+                        {% endif %}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 </div>
 {% endblock %}

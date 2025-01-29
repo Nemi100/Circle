@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block extra_title %} | Job Listings {% endblock %}
 
 {% block extra_css %}
@@ -8,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container common-body content-spacing mt-5">
     <h1 class="mb-4">Job Listings</h1>
     <div class="row d-flex flex-wrap">
         {% for job in page_obj %}
