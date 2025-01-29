@@ -1,17 +1,14 @@
 {% extends "base.html" %}
-
 {% load static %}
 {% block extra_title %} | Employer Dashboard {% endblock %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
-
 {% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container common-body content-spacing">
     <h1>{{ employer.employer_name }} Dashboard</h1>
     <p><strong>Staff ID:</strong> {{ profile.staff_id }}</p>
-    
 </div>
 {% endblock %}

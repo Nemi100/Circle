@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% load static %}
 {% load crispy_forms_tags %}
 {% block extra_title %} {% endblock %}
@@ -9,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container dashboard-overlay">
+<div class="container common-body content-spacing post-job">
     <h2 class="logo-font">Post a Job</h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}

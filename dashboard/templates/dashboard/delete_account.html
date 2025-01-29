@@ -1,8 +1,14 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block extra_title %} | Delete Account {% endblock %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="container" style="padding-top: 60px;">
+<div class="container common-body content-spacing delete-container">
     <h2>Delete Account</h2>
     <p>Are you sure you want to delete your account? This action cannot be undone.</p>
     <form method="post">

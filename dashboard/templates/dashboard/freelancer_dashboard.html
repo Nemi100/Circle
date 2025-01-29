@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% load static %}
 {% block extra_title %} | Freelancer Dashboard {% endblock %}
 
@@ -8,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container common-body content-spacing freelancer-dashboard">
     <div class="row">
         <div class="col-md-9">
             <h1>{{ profile.user.username }}'s Dashboard</h1>
@@ -42,7 +41,7 @@
                 <li><a href="{% url 'profiles:edit_freelancer_profile' %}" class="btn btn-primary btn-block">Edit Profile</a></li>
                 <li><a href="{% url 'subscription:subscribe' %}" class="btn btn-secondary btn-block">Subscribe</a></li>
                 <li><a href="{% url 'dashboard:view_profile' username=user.username %}" class="btn btn-info btn-block">View Profile</a></li>
-                <li><a href="#" class="btn btn-success btn-block">Message</a></li>
+                <li><a href="{% url 'dashboard:inbox' %}" class="btn btn-success btn-block">Message</a></li>
             </ul>
         </div>
     </div>

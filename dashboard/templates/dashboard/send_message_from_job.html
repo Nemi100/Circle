@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container" style="padding-top: 60px;">
+<div class="container common-body content-spacing send-message">
     <h2>Send Message About Job: {{ job.project_title }}</h2>
     <form method="post">
         {% csrf_token %}
