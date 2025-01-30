@@ -18,7 +18,6 @@
     </div>
     <div class="row">
         <div class="col-12 col-lg-6">
-            <p class="text-muted">You have selected a plan costing {{ price.unit_amount }} {{ price.currency }}.</p>
             <form action="{% url 'subscription:subscription_checkout' %}?price_id={{ price.id }}" method="POST" id="payment-form">
                 {% csrf_token %}
                 {{ form|crispy }}
@@ -49,6 +48,42 @@
 
 {% block postloadjs %}
 {{ block.super }}
-{{ stripe_public_key|json_script:"id_stripe_public_key" }}
-    <script src="{% static 'js/stripe_elements.js' %}"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    var stripe = Stripe('{{ stripe_public_key }}');
+    var elements = stripe.elements();
+    
+    var card = elements.create('card');
+    card.mount('#card-element');
+    
+    card.on('change', function(event) {
+        var displayError = document.getElementById('card-errors');
+        if (event.error) {
+            displayError.textContent = event.error.message;
+        } else {
+            displayError.textContent = '';
+        }
+    });
+    
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        stripe.confirmCardPayment(clientSecret, {
+            payment_method: {
+                card: card,
+                billing_details: {
+                    name: '{{ user.get_full_name }}'
+                }
+            }
+        }).then(function(result) {
+            if (result.error) {
+                var displayError = document.getElementById('card-errors');
+                displayError.textContent = result.error.message;
+            } else {
+                form.submit();
+            }
+        });
+    });
+</script>
 {% endblock %}

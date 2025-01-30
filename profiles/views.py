@@ -7,6 +7,9 @@ from .forms import FreelancerProfileForm, ClientProfileForm, ReviewForm, Previou
 from django.urls import reverse
 from dashboard.forms import JobForm
 from dashboard.models import Job 
+from django.contrib import messages
+
+
 
 def superuser_required(view_func):
     decorated_view_func = login_required(user_passes_test(lambda u: u.is_superuser)(view_func))
@@ -21,6 +24,7 @@ class CustomSignupView(SignupView):
         self.request.session['just_registered'] = True
         return redirect('select_user_type')
 
+
 @login_required
 def select_user_type(request):
     user_profile = request.user.userprofile
@@ -33,13 +37,24 @@ def select_user_type(request):
             user_type = form.cleaned_data['user_type']
             user_profile.user_type = user_type
             user_profile.save()
+
             if user_type == 'freelancer':
-                FreelancerProfile.objects.create(user=request.user)
+                # Check if the user already has a FreelancerProfile
+                if not FreelancerProfile.objects.filter(user=request.user).exists():
+                    FreelancerProfile.objects.create(user=request.user)
+                else:
+                    messages.error(request, 'You already have a FreelancerProfile.')
             else:
-                ClientProfile.objects.create(user=request.user)
+                # Check if the user already has a ClientProfile
+                if not ClientProfile.objects.filter(user=request.user).exists():
+                    ClientProfile.objects.create(user=request.user)
+                else:
+                    messages.error(request, 'You already have a ClientProfile.')
+
             return redirect('dashboard:user_dashboard')
     else:
         form = UserTypeForm()
+
     return render(request, 'profiles/select_user_type.html', {'form': form})
 
 @login_required

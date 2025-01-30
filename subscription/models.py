@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-
+from django.core.exceptions import ValidationError
 
 class Plan(models.Model):
     stripe_plan_id = models.CharField(max_length=100, unique=True)
@@ -30,5 +30,3 @@ class Subscription(models.Model):
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)
-
-

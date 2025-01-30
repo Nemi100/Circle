@@ -12,9 +12,10 @@
     <form action="{% url 'subscription:subscription_checkout' %}" method="GET">
         <div class="form-group">
             <label for="price_id">Choose your plan:</label>
-            <select class="form-control" id="price_id" name="price_id">
-                <option value="price_1Qh7drGhHsM8rbqsa2SZvUjq">Freelance premium plan - £39.00 GBP/month</option>
-                <option value="price_1Qh7hpGhHsM8rbqs4yQu6TAP">Freelance Yearly Plan - £250.00 GBP/year</option>
+            <select class="form-control" id="price_id" name="price_id" required>
+                {% for price in prices %}
+                <option value="{{ price.id }}">{{ price.nickname|default:price.id }} - {{ price.unit_amount_main }} {{ price.currency|upper }}</option>
+                {% endfor %}
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Proceed to Checkout</button>
