@@ -13,13 +13,11 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 
-
 # Stripe settings
 STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY')
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET')
-DJSTRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET')
-STRIPE_LIVE_MODE = False  # Ensure this is False for test mode
+
 
 
 # Application definition
@@ -40,10 +38,8 @@ INSTALLED_APPS = [
     'profiles',
     'dashboard',
     'subscription',
-    'djstripe',
 ]
 
-DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 

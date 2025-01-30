@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django_countries.fields import CountryField
-from djstripe.models import Customer
 
 class UserProfile(models.Model):
     USER_TYPE_CHOICES = [
@@ -37,11 +36,10 @@ class FreelancerProfile(models.Model):
     linkedin_profile = models.URLField(max_length=200, blank=True)
     available_for_meetings = models.CharField(max_length=10, choices=[('in_person', 'In Person'), ('online', 'Online')], blank=True)
     country = CountryField(blank=True)
-    stripe_customer = models.ForeignKey(Customer, null=True, blank=True, on_delete=models.SET_NULL)
+    stripe_customer_id = models.CharField(max_length=255, null=True, blank=True)  # Store the Stripe Customer ID directly
 
     def __str__(self):
         return self.user.username
-
 
 class PreviousWork(models.Model):
     profile = models.ForeignKey(FreelancerProfile, on_delete=models.CASCADE, related_name='profiles_previous_works')
@@ -80,7 +78,6 @@ class Review(models.Model):
     def __str__(self):
         return f"Review for {self.freelancer.user.username} by {self.client.user.username}"
 
-
 class Plan(models.Model):
     stripe_plan_id = models.CharField(max_length=100, unique=True)
     name = models.CharField(max_length=100)
@@ -98,7 +95,6 @@ class JobLink(models.Model):
 
     def __str__(self):
         return self.title
-
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
