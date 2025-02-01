@@ -8,6 +8,7 @@ from django.urls import reverse
 from dashboard.forms import JobForm
 from dashboard.models import Job 
 from django.contrib import messages
+import random
 
 
 
@@ -29,7 +30,7 @@ class CustomSignupView(SignupView):
 def select_user_type(request):
     user_profile = request.user.userprofile
     if user_profile.user_type:
-        return redirect('dashboard:user_dashboard')  # Redirect if user type is already set
+        return redirect('dashboard:user_dashboard')  
 
     if request.method == 'POST':
         form = UserTypeForm(request.POST)
@@ -215,3 +216,7 @@ def view_profile(request, username):
     return render(request, 'dashboard/view_profile.html', {'profile': profile})
 
 
+def top_tech_wizards(request):
+    freelancers = list(FreelancerProfile.objects.all())
+    top_freelancers = random.sample(freelancers, min(len(freelancers), 10))
+    return render(request, 'profiles/top_tech_wizards.html', {'top_freelancers': top_freelancers})
