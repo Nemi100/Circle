@@ -101,13 +101,15 @@ def subscription_checkout(request):
         'price': price,
     }
     return render(request, 'subscription/subscription_checkout.html', context)
+    
 
 def subscription_success(request, subscription_id):
     subscription = get_object_or_404(Subscription, id=subscription_id)
     messages.success(request, f'Subscription successfully processed! Your subscription ID is {subscription_id}. A confirmation email will be sent to {request.user.email}.')
     
     context = {'subscription': subscription}
-    return render(request, 'subscription/subscription_checkout.html', context)
+    return render(request, 'subscription/success.html', context)  
+
 
 @csrf_exempt
 def webhook(request):

@@ -13,6 +13,6 @@ urlpatterns = [
     path('select-user-type/', select_user_type, name='select_user_type'),
     path('client-profile/', client_profile_view, name='client_profile_view'),
     path('update-user-type/', update_user_type, name='update_user_type'),
+    path('top-tech-wizards/', views.top_tech_wizards, name='top_tech_wizards'),
+
 ]
-
-
