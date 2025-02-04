@@ -1,4 +1,5 @@
 import os
+import dj_database_url
 from pathlib import Path
 from decouple import config
 
@@ -18,6 +19,7 @@ STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY')
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET')
 
+ALLOWED_HOSTS = ['circle360.herokuapp.com', 'localhost']
 
 
 # Application definition
@@ -102,12 +104,21 @@ LOGIN_REDIRECT_URL = '/'
 WSGI_APPLICATION = 'circle.wsgi.application'
 
 # Database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if 'DATABASE_URL' in os.environ:
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
     }
-}
+else:
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+     
+
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
