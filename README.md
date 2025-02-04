@@ -47,7 +47,7 @@ Circle Project is a dynamic Django application designed to manage freelancer pro
 To run this project, you will need:
 - Python 3.6+
 - Django 3.1+
-- db.sqlite3 (optional but recommended for production)
+- PostgreSQL (optional but recommended for production)
 - Pip (Python package installer)
 
 ### Installing
@@ -181,6 +181,9 @@ While every effort has been made to ensure the application is bug-free, some kno
 ![Table](media/img/database_table_relationship.png)
 
 ## Descision Tree
+
+- The User Journey
+![Descision Tree](media/img/descison_tree.png)
 
 ## Future Improvements
 
