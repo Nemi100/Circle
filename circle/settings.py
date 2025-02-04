@@ -13,6 +13,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
+if 'DEVELOPMENT' in os.environ:
+    DEBUG = True
+else:
+    DEBUG = False
+
 
 # Stripe settings
 STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY')
