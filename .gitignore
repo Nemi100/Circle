@@ -1,6 +1,24 @@
+# Ignore SQLite database files
 *.sqlite3
+
+# Ignore Python bytecode files
 *.pyc
-__pycache__
+__pycache__/
+
+# Ignore environment variable files
 .env
+
+# Ignore log files
 *.log
-venv
+
+# Ignore virtual environment directories
+venv/
+env/
+
+# Ignore Django static and media files if they are being stored locally (not on S3)
+static/
+media/
+
+# Ignore IDE specific files
+.vscode/
+.idea/
