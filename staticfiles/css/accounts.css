@@ -1,0 +1,78 @@
+body {
+    background: #f2f2f2;
+    font-family: Arial, sans-serif;
+    color: #666;
+    box-sizing: border-box;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    margin-top: auto;
+}
+
+.container.profile-overlay {
+    background: #ffffff;
+    border: 1px solid #666;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+    margin: 180px auto; 
+    max-width: 600px;
+    box-sizing: border-box;
+    flex-grow: 1;
+}
+
+h1.logo-font {
+    font-size: 2rem;
+    color: #666;
+    text-align: center;
+}
+
+.entrance.login .form-group {
+    margin-bottom: 15px;
+}
+
+.entrance.login input {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    width: 100%;
+}
+
+.entrance.login .btn-primary {
+    background: #666;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.entrance.login .btn-outline-primary {
+    background: none;
+    border: 1px solid #666;
+    color: #666;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.entrance.login .btn-outline-primary:hover,
+.entrance.login .btn-primary:hover {
+    opacity: 0.8;
+}
+
+/* Card Styling */
+.card {
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: auto;
+}
+
+.card-body {
+    color: #666; /* Grey text */
+}
