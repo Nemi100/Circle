@@ -161,7 +161,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-if 'USE_AWS' in os.environ
+if 'USE_AWS' in os.environ:
     # Use Bucket Config
     AWS_STORAGE_BUCKET_NAME = 'circle360tex'
     AWS_S3_REGION_NAME ='eu-north-1'
