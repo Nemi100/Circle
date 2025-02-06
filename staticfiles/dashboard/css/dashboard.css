@@ -1,0 +1,93 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff; /* White background */
+    color: #666; /* Text color */
+    margin: 0;
+    padding: 0;
+}
+
+/* Common Container Styling */
+.container.common-body {
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); 
+    background: #ffffff; 
+    max-width: 800px; 
+    margin: 20px auto; /* Center the container and add margin */
+    text-align: center; /* Center the text */
+}
+
+/* New Class for Content Spacing */
+.content-spacing {
+    margin-top: 20px; /* Add some spacing below the navbar */
+}
+
+/* Specific Styles */
+.profile-overlay, .form-container {
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); 
+    margin: 20px auto;
+    max-width: 800px;
+    background: #ffffff;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9); 
+    z-index: -1;
+}
+
+.delete-container, .delete-job-container, .freelancer-dashboard, .inbox-container, .message-detail, .post-job, .send-message {
+    padding-top: 60px;
+}
+
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; 
+    text-align: center;
+    flex-direction: column; 
+}
+
+/* Inbox Styles */
+.inbox-header {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.message-list {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.message-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+}
+
+.message-item a {
+    color: #666;
+    text-decoration: none;
+    flex-grow: 1;
+}
+
+.message-item a:hover {
+    text-decoration: underline;
+}
+
+.message-item .badge-warning {
+    background-color: #ffcc00; /* Badge color for new messages */
+    color: #fff;
+}
