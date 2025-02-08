@@ -1,0 +1,172 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    color: #666; /* Grey text */
+    font-family: 'Lato', sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+
+body {
+    background-color: #ffffff; /* Glossy white background */
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Container Styling */
+.container {
+    max-width: 900px;
+    background: #ffffff; /* Glossy white background */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    color: #666; /* Grey text */
+}
+
+/* Profile Header */
+.profile-header .d-flex {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-header h1 {
+    font-size: 2.5em;
+    color: #666; /* Grey text */
+    margin-left: 20px;
+}
+
+/* Profile Section */
+.profile-section h2 {
+    margin-top: 30px;
+    font-size: 1.8em;
+    color: #666; /* Grey text */
+}
+
+.profile-section p {
+    margin: 10px 0;
+    line-height: 1.6;
+    color: #666; /* Grey text */
+}
+
+/* Profile Image */
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Profile Section Links */
+.profile-section a {
+    color: #666; /* Grey text */
+    text-decoration: none;
+}
+
+.profile-section a:hover {
+    text-decoration: underline;
+}
+
+/* Navbar Styling */
+header .navbar-nav .nav-item .nav-link {
+    padding: 10px 15px;
+    font-weight: bold;
+    color: #666; /* Grey text */
+}
+
+header .btn-primary {
+    background-color: #666; /* Grey text */
+    border-color: #666;
+}
+
+header {
+    padding-bottom: 20px;
+}
+
+/* Button Styling */
+.btn {
+    margin-top: 1rem;
+}
+
+.btn-primary {
+    background-color: #666; /* Grey text */
+    border-color: #666;
+}
+
+.btn-outline-primary {
+    color: #666; /* Grey text */
+    border-color: #666;
+}
+
+.btn-outline-primary:hover {
+    background-color: #666; /* Grey text */
+    color: #fff;
+}
+
+/* Footer Styling */
+footer {
+    background-color: #ffffff; /* Glossy white background */
+    color: #666; /* Grey text */
+    padding: 2rem;
+    text-align: center;
+    width: 100%;
+    margin-top: auto;
+    box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.1);
+}
+
+footer .footer-content {
+    display: flex;
+    flex-direction: column; /* Change to column for better responsiveness */
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto; /* Center the content */
+}
+
+footer .footer-content .column {
+    flex: 1;
+    padding: 1rem;
+    width: 100%;
+}
+
+footer .footer-content .social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+footer .footer-content .social-icons a {
+    color: #666; /* Grey text */
+    text-decoration: none;
+    font-size: 1.5rem;
+}
+
+footer .footer-content .social-icons a:hover {
+    color: #999; /* Lighter grey on hover */
+}
+
+.footer-bottom {
+    margin-top: 1rem;
+    border-top: 1px solid #666; /* Grey border */
+    padding-top: 1rem;
+    width: 100%;
+    text-align: center;
+}
+
+/* Media Queries for Responsiveness */
+@media (min-width: 768px) {
+    footer .footer-content {
+        flex-direction: row; /* Row layout for medium and larger screens */
+        justify-content: space-between;
+    }
+
+    footer .footer-content .column {
+        width: auto;
+        text-align: left; /* Align text to the left for larger screens */
+    }
+}
+
+
