@@ -16,7 +16,7 @@ venv/
 env/
 
 # Ignore Django static and media files if they are being stored locally (not on S3)
-static/
+# static/
 media/
 
 # Ignore IDE specific files
