@@ -1,0 +1,6 @@
+3dcf13663cbc74ee1011ff1eadd9e64e714374e8,DELETE,regular-file,circle/settings.py,5921,
+37beadfbc6323f2b5e2ac5d103359499cb1d6fd9,DELETE,regular-file,env/Lib/site-packages/django_countries/tests/settings.py,1136,
+e054b297a726b90112cfa06d6852e785867495b6,DELETE,regular-file,env/Lib/site-packages/djstripe/settings.py,7572,
+b0d7bacecc231983986f605c8bcef18b632e1f46,DELETE,regular-file,env/Lib/site-packages/rest_framework/settings.py,7950,
+7402ce4a3d04c172d6222b32c66459459578ed69,DELETE,regular-file,env/Lib/site-packages/stripe/api_resources/tax/settings.py,543,
+8b29903573192a322976cc952fc032436e27d8a2,DELETE,regular-file,env/Lib/site-packages/tutorial/settings.py,3249,
