@@ -24,7 +24,16 @@ STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY')
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET')
 
-ALLOWED_HOSTS = ['circle360.herokuapp.com', 'circle360-9aefcf772aed.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = [
+    'circle360.herokuapp.com',
+    'circle360-9aefcf772aed.herokuapp.com',
+    'localhost'
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://circle360-9aefcf772aed.herokuapp.com",
+    "https://circle360.herokuapp.com"
+]
 
 
 # Application definition

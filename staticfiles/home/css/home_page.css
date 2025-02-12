@@ -11,7 +11,7 @@ body {
 
 /* Jumbotron */
 .jumbotron {
-    background: url("{% static 'home/img/home_page_img.jpg' %}") no-repeat center center;
+    background: url("https://circle360tex.s3.amazonaws.com/static/home/img/home_page_img.jpg") no-repeat center center;
     background-size: cover;
     color: rgb(37, 36, 36);
     height: 100vh;
@@ -20,6 +20,7 @@ body {
     justify-content: center;
     text-align: center;
 }
+
 
 
 /* card styles */
