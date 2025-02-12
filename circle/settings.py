@@ -161,20 +161,13 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-# Bucketeer settings
-if 'USE_BUCKETEER' in os.environ:
-    # Cache Control
-    BUCKETEER_CACHE_CONTROL = {
-        'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
-        'CacheControl': 'max-age=94608000',
-    }
-
+if 'USE_AWS' in os.environ:
     # Bucket Config
-    BUCKETEER_STORAGE_BUCKET_NAME = config('BUCKETEER_BUCKET_NAME')
-    BUCKETEER_REGION_NAME =  config('BUCKETEER_AWS_REGION')
-    BUCKETEER_ACCESS_KEY_ID = os.environ.get('BUCKETEER_ACCESS_KEY_ID')
-    BUCKETEER_SECRET_ACCESS_KEY = os.environ.get('BUCKETEER_SECRET_ACCESS_KEY')
-    BUCKETEER_CUSTOM_DOMAIN = f'{BUCKETEER_STORAGE_BUCKET_NAME}.bucketeer.com'
+    AWS_STORAGE_BUCKET_NAME = 'circle360tex'
+    AWS_S3_REGION_NAME = 'eu-north-1'
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 
     # Static and media files
     STATICFILES_STORAGE = 'custom_storages.StaticStorage'
@@ -182,9 +175,10 @@ if 'USE_BUCKETEER' in os.environ:
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
     MEDIAFILES_LOCATION = 'media'
 
-    # Override static and media URLS in production
-    STATIC_URL = f'https://{BUCKETEER_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
-    MEDIA_URL = f'https://{BUCKETEER_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
+    # Override static and media URLs in production
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
+    
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
