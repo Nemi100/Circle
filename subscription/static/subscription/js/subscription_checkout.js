@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    var stripePublicKey = "{{ stripe_public_key }}";  // Dynamically set from your template
+    var stripePublicKey = "{{ stripe_public_key }}";  
     var stripe = Stripe(stripePublicKey);
     var elements = stripe.elements();
 
