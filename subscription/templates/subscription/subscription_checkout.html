@@ -52,7 +52,6 @@
 
 {% block postloadjs %}
 {{ block.super }}
-<script src="https://js.stripe.com/v3/"></script>
 <script>
     var clientSecret = "{{ client_secret }}";  
     var stripePublicKey = "{{ stripe_public_key }}"; 
