@@ -20,7 +20,7 @@ def subscription_plans(request):
     filtered_prices = []
 
     # Define the specific price IDs for the plans you want to display
-    desired_price_ids = ["price_1QjJa2GhHsM8rbqsCaNyGaGd", "price_1QjJZMGhHsM8rbqsjPdZHyIE"]
+    desired_price_ids = ["price_1QrzuuGUqeNgdOiGTPDn6rUp", "price_1QrztwGUqeNgdOiGYlpH9khA"]
 
     # Pre-process prices to convert unit_amount to the main currency unit and filter specific plans
     for price in prices.data:
@@ -32,9 +32,9 @@ def subscription_plans(request):
     # Manually set nicknames if they are not provided
     for price in filtered_prices:
         if not price.nickname:
-            if price.id == "price_1QjJa2GhHsM8rbqsCaNyGaGd":
+            if price.id == "price_1QrzuuGUqeNgdOiGTPDn6rUp":
                 price.nickname = "Circle Monthly Plan"
-            elif price.id == "price_1QjJZMGhHsM8rbqsjPdZHyIE":
+            elif price.id == "price_1QrztwGUqeNgdOiGYlpH9khA":
                 price.nickname = "Circle Yearly Plan"
 
     context = {'prices': filtered_prices}
@@ -65,10 +65,7 @@ def subscription_checkout(request):
         messages.warning(request, 'Stripe public key is missing.')
 
     if request.method == 'POST':
-        subscription_form = SubscriptionCheckoutForm({
-            'user': request.user.id,
-            'email': request.POST.get('email')
-        })
+        subscription_form = SubscriptionCheckoutForm(request.POST, user=request.user)
 
         if subscription_form.is_valid():
             subscription = subscription_form.save(commit=False)
@@ -79,7 +76,6 @@ def subscription_checkout(request):
                 customer = stripe.Customer.create(email=subscription_form.cleaned_data['email'], name=request.user.get_full_name())
                 stripe_subscription = stripe.Subscription.create(customer=customer.id, items=[{'price': price_id}])
                 
-
                 plan = Plan.objects.get(stripe_plan_id=price_id)
                 subscription.plan = plan
                 subscription.stripe_subscription_id = stripe_subscription.id
@@ -93,7 +89,7 @@ def subscription_checkout(request):
             messages.error(request, 'There was an error with your form. Please double-check your information.')
 
     else:
-        subscription_form = SubscriptionCheckoutForm(initial={'user': request.user, 'email': request.user.email})
+        subscription_form = SubscriptionCheckoutForm(user=request.user, initial={'email': request.user.email})
     
     context = {
         'form': subscription_form,
@@ -101,7 +97,7 @@ def subscription_checkout(request):
         'price': price,
     }
     return render(request, 'subscription/subscription_checkout.html', context)
-    
+
 
 def subscription_success(request, subscription_id):
     subscription = get_object_or_404(Subscription, id=subscription_id)
