@@ -74,15 +74,21 @@ def subscription_checkout(request):
 
             try:
                 customer = stripe.Customer.create(email=subscription_form.cleaned_data['email'], name=request.user.get_full_name())
-                stripe_subscription = stripe.Subscription.create(customer=customer.id, items=[{'price': price_id}])
+                payment_intent = stripe.PaymentIntent.create(
+                    amount=price.unit_amount, 
+                    currency=price.currency, 
+                    customer=customer.id, 
+                    description="Subscription Payment"
+                )
+                client_secret = payment_intent.client_secret
                 
-                plan = Plan.objects.get(stripe_plan_id=price_id)
-                subscription.plan = plan
-                subscription.stripe_subscription_id = stripe_subscription.id
-                subscription.user = request.user
-                subscription.save()
-                messages.success(request, 'Subscription created successfully!')
-                return redirect('subscription:subscription_success', subscription_id=subscription.id)
+                context = {
+                    'form': subscription_form,
+                    'stripe_public_key': stripe_public_key,
+                    'price': price,
+                    'client_secret': client_secret 
+                }
+                return render(request, 'subscription/subscription_checkout.html', context)
             except Exception as e:
                 messages.error(request, f"An error occurred: {e}")
         else:
@@ -90,14 +96,12 @@ def subscription_checkout(request):
 
     else:
         subscription_form = SubscriptionCheckoutForm(user=request.user, initial={'email': request.user.email})
-    
-    context = {
-        'form': subscription_form,
-        'stripe_public_key': stripe_public_key,
-        'price': price,
-    }
-    return render(request, 'subscription/subscription_checkout.html', context)
-
+        context = {
+            'form': subscription_form,
+            'stripe_public_key': stripe_public_key,
+            'price': price,
+        }
+        return render(request, 'subscription/subscription_checkout.html', context)
 
 def subscription_success(request, subscription_id):
     subscription = get_object_or_404(Subscription, id=subscription_id)

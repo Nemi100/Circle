@@ -21,6 +21,10 @@
             <form action="{% url 'subscription:subscription_checkout' %}?price_id={{ price.id }}" method="POST" id="payment-form">
                 {% csrf_token %}
                 {{ form|crispy }}
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="Your Name" required>
+                </div>
                 <div id="card-element" class="mb-3">
                     <!-- Stripe card element will go here -->
                 </div>
@@ -50,40 +54,8 @@
 {{ block.super }}
 <script src="https://js.stripe.com/v3/"></script>
 <script>
-    var stripe = Stripe('{{ stripe_public_key }}');
-    var elements = stripe.elements();
-    
-    var card = elements.create('card');
-    card.mount('#card-element');
-    
-    card.on('change', function(event) {
-        var displayError = document.getElementById('card-errors');
-        if (event.error) {
-            displayError.textContent = event.error.message;
-        } else {
-            displayError.textContent = '';
-        }
-    });
-    
-    var form = document.getElementById('payment-form');
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        stripe.confirmCardPayment(clientSecret, {
-            payment_method: {
-                card: card,
-                billing_details: {
-                    name: '{{ user.get_full_name }}'
-                }
-            }
-        }).then(function(result) {
-            if (result.error) {
-                var displayError = document.getElementById('card-errors');
-                displayError.textContent = result.error.message;
-            } else {
-                form.submit();
-            }
-        });
-    });
+    var clientSecret = "{{ client_secret }}";  
+    var stripePublicKey = "{{ stripe_public_key }}"; 
 </script>
+<script src="{% static 'subscriptions/js/subscription_checkout.js' %}"></script>
 {% endblock %}
