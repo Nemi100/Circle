@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     var stripePublicKey = "{{ stripe_public_key }}";  
+    var clientSecret = document.getElementById('id_client_secret').value;  
+
     var stripe = Stripe(stripePublicKey);
     var elements = stripe.elements();
 
@@ -13,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
             '::placeholder': {
                 color: '#aab7c4'
             },
-            border: '1px solid black'  // Add black border
+            border: '1px solid black'
         },
         invalid: {
             color: '#fa755a',

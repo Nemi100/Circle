@@ -24,7 +24,6 @@
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input type="text" id="name" name="name" class="form-control" placeholder="Your Name" required autocomplete="name">
-
                 </div>
                 <div id="card-element" class="mb-3">
                     <!-- Stripe card element will go here -->
@@ -54,8 +53,8 @@
 {% block postloadjs %}
 {{ block.super }}
 <script>
-    var clientSecret = "{{ client_secret }}";  
-    var stripePublicKey = "{{ stripe_public_key }}"; 
+    var clientSecret = "{{ client_secret }}";
+    var stripePublicKey = "{{ stripe_public_key }}";
 </script>
 <script src="{% static 'subscriptions/js/subscription_checkout.js' %}"></script>
 {% endblock %}
