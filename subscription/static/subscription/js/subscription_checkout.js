@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
             payment_method: {
                 card: card,
                 billing_details: {
-                    name: document.getElementById('name').value  // Ensure you have the ID correctly set in HTML
+                    name: document.getElementById('name').value  
                 }
             }
         }).then(function(result) {

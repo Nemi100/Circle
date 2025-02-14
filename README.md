@@ -16,8 +16,7 @@
     -[Testing](#testing)
     -[Known Bugs](#known-bugs)
 10. [Tables](#tables)
-10. [Descision Tree](#descision-tree)
-11. [Future improvements](#future-improvements)
+11. [Descision Tree](#descision-tree)
 12. [Wireframes](#wireframes)
 13. [Acknowledgements](#acknowledgements)
 14. [Contact](#contact)
@@ -134,6 +133,7 @@ I have approached the design of Circle with utmost simplicity, as you can see fr
 
 - Ensuring that the application can handle additional features and functionalities without compromising performance.
 
+
 ## User Experience (UX)
 
 The design philosophy of Circle revolves around simplicity and ease of use. Key aspects include:
@@ -159,21 +159,29 @@ A comprehensive testing strategy is employed to ensure the robustness and reliab
 4. Manual Testing: Manual testing is conducted to catch any edge cases or issues that automated tests might miss.
 
 5. Cross-Browser Testing: The application is tested on multiple browsers to ensure compatibility and consistent performance.
-
+ 
 6. Performance Testing: Load testing and performance testing are conducted to ensure the application can handle high traffic and large datasets.
 
 
-## Known Bugs
+## Known Bugs / Future Improvements
 
-While every effort has been made to ensure the application is bug-free, some known issues may still exist:
+While every effort has been made to ensure the application is bug-free, some known issues still exists:
 
-1. Top Tech Wizards Board do add Clients profiles, This would be looked into .
+1. Stripe payment although implemented was not successfully executed
 
-2. Messages in the dashboard would need more refininment, I would leave for future developements
+2. Amazon AWS not automated. Staticfiles has been used during the implementation of this application.
 
-3. Stripe payments is yet to be fully functioning as it doesnt run to success . 
+3. Tech ranking not currently implemented, this is suppose to inform users of the top tech available for their needs. It is also not fully responsive and refined, this means postings displayed on this card is not uniformed.
 
-4. The cards displaying top tech wizards and job postinmgs are not fully responsive as some are longer the other which means when i have a list of 10 which is the maximum per page the display wld be non uniform
+4. Refinement of the inbox messages within the dashboard.
+
+5. To ensure the  Tech Wizards Board do add only freelancers who have the best reviews per week or freelancers available being a growing site.
+
+6. Ensure freelancers subscription module is fully and continually optimised.
+
+7. Pages (Services, About Us and Contact) does not have any content or individual pages.
+
+8. Implementation of job satisfaction survey after the completion of each task by the tech.
 
 ## Tables
 
@@ -185,19 +193,9 @@ While every effort has been made to ensure the application is bug-free, some kno
 - The User Journey
 ![Descision Tree](media/img/descison_tree.png)
 
-## Future Improvements
 
-The Cirle will be an Ongoing project and the following would be top of list priorities 
 
-1. To ensure the  Tech Wizards Board do add only freelancers who have the best reviews per week or freelancers available being a growing site.
-
-2. To remodel the Messages in the dashboard view.
-
-3. To continually ensure freelancers subscription and Stripe payments is fully functioning . 
-
-4. to also fix cards displaying top tech wizards and job postings to be fully responsive as some are longer the other which means when i have a list of 10 which is the maximum per page the display wld be non uniform.
-
-## Acknowledgements
+## References
 
 We would like to thank the following individuals and organizations for their contributions to this project:
 
@@ -206,7 +204,6 @@ We would like to thank the following individuals and organizations for their con
  - [TechWithGio](https://www.youtube.com/watch?v=OLsVfmjEpSc&t=95s)
  - [Pexels Images](https://www.pexels.com/search/concert/)
  - [Code Institute Boutique Ado Project](https://www.youtube.com/watch?v=Semy2AHoclk)
-
  - [Parwiz Forogh](https://www.youtube.com/watch?v=XTpLbBJTOM4&t=276s)
 
 
