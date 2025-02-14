@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'subscriptions/css/subscription.css' %}">
+    <link rel="stylesheet" href="{% static 'subscription/css/subscription.css' %}">
     <style>
         /* specific styling for #card-element */
         #card-element {
@@ -40,7 +40,7 @@
                 </div>
                 <div id="card-errors" role="alert" class="text-danger mb-3"></div>
                 <div class="submit-button text-right mt-5 mb-2">
-                    <button id="submit-button" class="btn btn-black rounded-0">
+                    <button id="submit-button" class="btn btn-black rounded-0" type="submit">Submit</button>
                         <span class="font-weight-bold">Complete Subscription</span>
                         <span class="icon">
                             <i class="fas fa-lock"></i>
