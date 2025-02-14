@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
-    var stripePublicKey = "{{ stripe_public_key }}";  // Dynamically set from your template
+    var stripePublicKey = "{{ stripe_public_key }}";  
+    var clientSecret = document.getElementById('id_client_secret').value;  
+
     var stripe = Stripe(stripePublicKey);
     var elements = stripe.elements();
 
@@ -13,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
             '::placeholder': {
                 color: '#aab7c4'
             },
-            border: '1px solid black'  // Add black border
+            border: '1px solid black'
         },
         invalid: {
             color: '#fa755a',
@@ -41,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function() {
             payment_method: {
                 card: card,
                 billing_details: {
-                    name: document.getElementById('name').value  // Ensure you have the ID correctly set in HTML
+                    name: document.getElementById('name').value  
                 }
             }
         }).then(function(result) {

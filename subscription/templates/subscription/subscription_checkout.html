@@ -4,6 +4,16 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'subscriptions/css/subscription.css' %}">
+    <style>
+        /* specific styling for #card-element */
+        #card-element {
+            background-color: white;
+            padding: 10px;
+            border: 1px solid #000;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -52,9 +62,7 @@
 
 {% block postloadjs %}
 {{ block.super }}
-<script>
-    var clientSecret = "{{ client_secret }}";
-    var stripePublicKey = "{{ stripe_public_key }}";
-</script>
+{{ stripe_public_key|json_script:"id_stripe_public_key" }}
+{{ client_secret|json_script:"id_client_secret" }}
 <script src="{% static 'subscriptions/js/subscription_checkout.js' %}"></script>
 {% endblock %}
