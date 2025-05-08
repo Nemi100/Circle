@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'jobs/css/jobs.css' %}">
+{% endblock extra_css %}
+
+{% block extra_header %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Apply for {{ job.title }}</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- CV Upload -->
+        <div class="form-group mb-3">
+            <label for="cv">Upload Your CV (Optional)</label>
+            <input id="cv" name="cv" type="file" class="form-control" accept=".pdf,.doc,.docx">
+            <small class="form-text text-muted">Accepted formats: PDF, DOC, DOCX.</small>
+        </div>
+
+        <!-- Portfolio Link -->
+        <div class="form-group mb-3">
+            <label for="portfolio_link">Portfolio Link (Optional)</label>
+            <input id="portfolio_link" name="portfolio_link" type="url" class="form-control" placeholder="https://yourportfolio.com">
+            <small class="form-text text-muted">Provide the URL to your portfolio showcasing your work.</small>
+        </div>
+        
+        <!-- LinkedIn Profile -->
+        <div class="form-group mb-3">
+            <label for="linkedin">LinkedIn Profile Link (Optional)</label>
+            <input id="linkedin" name="linkedin" type="url" class="form-control" placeholder="https://linkedin.com/in/your-profile">
+            <small class="form-text text-muted">Provide the URL to your LinkedIn profile.</small>
+        </div>
+        
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-success mt-3">Submit Application</button>
+    </form>
+</div>
+{% endblock %}

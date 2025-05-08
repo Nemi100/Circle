@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const skillSelect = document.getElementById("skillSelect");
+        const searchButton = document.getElementById("searchButton");
+
+        // Clear the query string from the URL on page load
+        if (window.location.search) {
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        // Disable the search button if no skill is selected
+        if (skillSelect.value === "") {
+            searchButton.disabled = true;
+        }
+
+        // Enable or disable the button based on dropdown selection
+        skillSelect.addEventListener("change", function () {
+            if (skillSelect.value) {
+                searchButton.disabled = false; // Enable button for valid skill
+            } else {
+                searchButton.disabled = true; // Disable button for placeholder
+            }
+        });
+    });
+
+    function validateForm() {
+        const skillSelect = document.getElementById("skillSelect");
+        if (!skillSelect.value || skillSelect.value === "") {
+            alert("Please select a valid skill before searching!");
+            return false; // Prevent form submission
+        }
+        return true; // Allow form submission
+    }
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+{% endblock %}
+
+{% block extra_header %}
+<div class="container text-center py-3">
+    <h1 class="text-success">Search for Skilled Freelancers</h1>
+    <p>Find talented professionals tailored to your project's needs. Search by skills and connect with the best fit for your team today!</p>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Notifications Section -->
+    {% if messages %}
+    <div class="row">
+        <div class="col-md-12">
+            {% for message in messages %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Search Freelancers Section -->
+    <div class="row align-items-stretch">
+        <!-- Motivational Message (Left Column) -->
+        <div class="col-md-6 d-flex">
+            <div class="freelancers-intro onboarding-form w-100">
+                <h1 class="text-success">Don’t Wait—Find Your Freelancer Today!</h1>
+                <p>Time is of the essence! Don’t let your project lose momentum. Search skilled professionals and connect with them immediately.</p>
+                <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#skillsGuideModal">
+                    Not Sure? Explore Skill Categories
+                </button>
+            </div>
+        </div>
+
+        <!-- Search Form (Right Column) -->
+        <div class="col-md-6 d-flex align-items-stretch">
+            <div class="freelancers-search onboarding-form w-100">
+                <form method="GET" action="" class="d-flex flex-column">
+                    <div class="form-group">
+                        <label class="form-label" for="skillSelect">Select a Skill:</label>
+                        <select id="skillSelect" name="skill" class="form-control" required>
+                            <option value="" disabled {% if not skill %}selected{% endif %}>Select a Skill...</option>
+                            <option value="frontend" {% if skill == "frontend" %}selected{% endif %}>Frontend Development</option>
+                            <option value="backend" {% if skill == "backend" %}selected{% endif %}>Backend Development</option>
+                            <option value="seo" {% if skill == "seo" %}selected{% endif %}>SEO Optimization</option>
+                            <option value="design" {% if skill == "design" %}selected{% endif %}>Graphic Design</option>
+                            <option value="writing" {% if skill == "writing" %}selected{% endif %}>Content Writing</option>
+                            <option value="mobile" {% if skill == "mobile" %}selected{% endif %}>Mobile App Development</option>
+                        </select>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success" id="searchButton">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="freelancers-results container mt-5">
+        {% if search_performed %}
+            <h3 class="text-success">Freelancers Found:</h3>
+            {% if message %}
+                <!-- Show message for null results -->
+                <p class="text-danger">{{ message }}</p>
+            {% elif freelancers %}
+                <!-- Display freelancer results -->
+                <div class="row">
+                    {% for freelancer in freelancers %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card shadow-sm">
+                                {% if freelancer.profile_image %}
+                                    <img src="{{ freelancer.profile_image.url }}" class="card-img-top img-thumbnail" alt="{{ freelancer.user.username }}">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ freelancer.user.username }}</h5>
+                                    <p><strong>Skills:</strong> {{ freelancer.skills.all|join:", " }}</p>
+                                    <a href="#" class="btn btn-success">View Profile</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% else %}
+            <!-- Fallback message for no search performed -->
+            <p class="text-muted">Use the search bar above to find talented freelancers based on their skills.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Educational Modal -->
+<div class="modal fade skills-guide-modal" id="skillsGuideModal" tabindex="-1" role="dialog" aria-labelledby="skillsGuideLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-success" id="skillsGuideLabel">Need Help Choosing a Skill?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body">
+                <p>Not sure what skill category your project requires? Explore some common categories below to guide your search:</p>
+                <ul>
+                    <li><strong>Frontend Development</strong>: HTML, CSS, JavaScript, React</li>
+                    <li><strong>SEO Optimization</strong>: Keyword research, Content strategy</li>
+                    <li><strong>Graphic Design</strong>: Logo creation, Branding, UI/UX design</li>
+                    <li><strong>Mobile App Development</strong>: iOS/Android apps, Cross-platform tools</li>
+                    <li><strong>Content Writing</strong>: Blogs, Articles, Copywriting</li>
+                </ul>
+                <p>Use the search bar to find freelancers who match these categories!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close and Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'jobs/css/jobs.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Applications for {{ job.title }}</h1>
+    <ul>
+        {% for application in applications %}
+        <li>
+            <p><strong>Freelancer:</strong> {{ application.freelancer.user.username }}</p>
+            <p><strong>Cover Letter:</strong> {{ application.cover_letter }}</p>
+            <a href="{% url 'messages:start_conversation' application.freelancer.user.id %}" class="btn btn-outline-primary">Message Freelancer</a>
+        </li>
+        {% empty %}
+        <p>No applications yet for this job.</p>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

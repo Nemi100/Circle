@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Subscribe to Circle{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'subscription/css/subscription.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="text-center mb-4">
+        <h1 class="display-4 text-primary">Join Our Membership</h1>
+        <p class="lead text-muted">Unlock exclusive perks and save big with our Gold Membership plans tailored just for you.</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h2 class="card-title text-center text-success">Choose Your Plan</h2>
+                    <p class="text-center text-muted">Select a plan that suits your needs and start your subscription journey today.</p>
+
+                    <form method="POST" action="{% url 'subscription:stripe_checkout' %}">
+                        {% csrf_token %}
+                        <div class="form-check my-3">
+                            <input type="radio" name="price_id" value="price_1R4RJVGyOzKHwVNPMGmlSFZM" id="Monthly" required>
+                            <label class="form-check-label" for="Monthly">
+                                <strong>Monthly Plan</strong>: £35 per month
+                            </label>
+                        </div>
+
+                        <div class="form-check my-3">
+                            <input type="radio" name="price_id" value="price_1R4RLSGyOzKHwVNPcSHiBECR" id="Yearly" required>
+                            <label class="form-check-label" for="Yearly">
+                                <strong>Yearly Plan</strong>: £299 per year (save £121 annually)
+                            </label>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-credit-card"></i> Subscribe Now
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <blockquote class="blockquote text-muted">
+                    <p>"Flexibility and value combined. Choose a plan that fits your lifestyle."</p>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

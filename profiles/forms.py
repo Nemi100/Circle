@@ -1,86 +1,127 @@
 from django import forms
-from .models import FreelancerProfile, ClientProfile, EmployerProfile, Skill, Review, PreviousWork
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from .models import FreelancerProfile, ClientProfile, Skill 
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
+
+
+
+# FreelancerProfile Form
 
 class FreelancerProfileForm(forms.ModelForm):
+
+    first_name = forms.CharField(
+        max_length=50,
+        required=False,
+        label="First Name",
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your first name'})
+    )
+    last_name = forms.CharField(
+        max_length=50,
+        required=False,
+        label="Last Name",
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your last name'})
+    )
+    profile_picture = forms.ImageField(
+        required=False,
+        label="Profile Picture",
+        widget=forms.ClearableFileInput(attrs={'class': 'form-control-file'})
+    )
     skills = forms.ModelMultipleChoiceField(
         queryset=Skill.objects.all(),
         widget=forms.CheckboxSelectMultiple,
-        required=False
+        required=False,
+        label="Select Skills",
+        help_text="Choose the skills that best represent your expertise."
+    )
+    location = forms.CharField(
+        required=False,
+        label="Location",
+        help_text="Where are you based? E.g., London, UK.",
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your location'})
+    )
+    meeting_preference = forms.ChoiceField(
+        choices=[('Face-to-Face', 'Face-to-Face'), ('Online', 'Online'), ('Both', 'Both')],
+        required=False,
+        help_text="Select your preferred meeting type.",
+        widget=forms.Select(attrs={'class': 'form-select'})
     )
 
     class Meta:
         model = FreelancerProfile
         fields = [
-            'skills', 'bio', 'phone_number', 'available_for_meetings',
-            'country', 'out_of_office', 'linkedin_profile', 'profile_image'
+            'bio',
+            'skills',
+            'profile_picture',
+            'location',
+            'portfolio_link',  
+            'meeting_preference',
         ]
+        widgets = {
+            'bio': forms.Textarea(attrs={
+                'rows': 3,
+                'placeholder': 'Tell clients about yourself',
+                'class': 'form-control',
+            }),
+            'portfolio_link': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., https://yourportfolio.com',
+            }),
+            'location': forms.TextInput(attrs={
+                'class': 'form-control',
+            }),
+            'meeting_preference': forms.Select(attrs={
+                'class': 'form-control',
+            }),
+        }
 
-    def __init__(self, *args, **kwargs):
-        super(FreelancerProfileForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_method = 'post'
-        self.helper.add_input(Submit('submit', 'Save Profile'))
+# ClientProfile Form
+
+
 
 class ClientProfileForm(forms.ModelForm):
+    vat_number = forms.CharField(
+        required=False,
+        help_text="Enter your VAT number for tax purposes (optional)."
+    )
+    company_address = forms.CharField(
+        required=False,
+        help_text="Include your office or business address."
+    )
+    location = forms.CharField(
+        required=False,
+        help_text="Enter your business location.",
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'E.g., London, UK'})
+    )
+    meeting_preference = forms.ChoiceField(
+        choices=[('Face-to-Face', 'Face-to-Face'), ('Online', 'Online'), ('Both', 'Both')],
+        required=False,
+        help_text="Choose your preferred meeting format.",
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+    def clean_vat_number(self):
+        vat_number = self.cleaned_data.get('vat_number')
+        if vat_number and not vat_number.isdigit():
+            raise forms.ValidationError("VAT number must contain only numeric characters.")
+        return vat_number
+
     class Meta:
         model = ClientProfile
         fields = [
-            'company_name', 'phone_number', 'company_address',
-            'vat_number', 'country'
+            'contact_name',
+            'company_name',
+            'company_address',
+            'vat_number',
+            'email',
+            'phone_number',
+            'location',
+            'meeting_preference'
         ]
+        widgets = {
+            'company_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
+        }
 
-    def __init__(self, *args, **kwargs):
-        super(ClientProfileForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_method = 'post'
-        self.helper.add_input(Submit('submit', 'Save Profile'))
 
-class EmployerProfileForm(forms.ModelForm):
-    class Meta:
-        model = EmployerProfile
-        fields = [
-            'user', 'staff_id'
-        ]
 
-    def __init__(self, *args, **kwargs):
-        super(EmployerProfileForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_method = 'post'
-        self.helper.add_input(Submit('submit', 'Save Profile'))
-
-class ReviewForm(forms.ModelForm):
-    class Meta:
-        model = Review
-        fields = ['rating', 'feedback']
-
-    def __init__(self, *args, **kwargs):
-        super(ReviewForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_method = 'post'
-        self.helper.add_input(Submit('submit', 'Submit Review'))
-
-class PreviousWorkForm(forms.ModelForm):
-    class Meta:
-        model = PreviousWork
-        fields = ['title', 'description', 'link']
-
-    def __init__(self, *args, **kwargs):
-        super(PreviousWorkForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_method = 'post'
-        self.helper.add_input(Submit('submit', 'Add Work'))
-
-class UserTypeForm(forms.Form):
-    USER_TYPE_CHOICES = [
-        ('freelancer', 'Freelancer'),
-        ('client', 'Client'),
-    ]
-    user_type = forms.ChoiceField(choices=USER_TYPE_CHOICES, widget=forms.RadioSelect)
-
-    def __init__(self, *args, **kwargs):
-        super(UserTypeForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_method = 'post'
-        self.helper.add_input(Submit('submit', 'Select User Type'))

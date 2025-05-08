@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'user_messages/css/user_messages.css' %}">
+{% endblock extra_css %}
+
+{% block extra_header %}
+<h1 class="text-center text-success my-4">
+    {% if user_is_client %}
+        <i class="fas fa-user-tie"></i> Welcome to Your Inbox, {{ request.user.username }}
+    {% else %}
+        <i class="fas fa-briefcase"></i> Welcome to Your Inbox, {{ request.user.username }}
+    {% endif %}
+</h1>
+<p class="text-center text-muted">
+    {% if user_is_client %}
+        Check messages from freelancers applying to your jobs.
+    {% else %}
+        Connect with clients and receive updates from staff.
+    {% endif %}
+</p>
+<a href="{% url 'profiles:user_dashboard' %}" class="btn btn-outline-primary mb-3">
+    <i class="fas fa-arrow-left"></i> Back to Dashboard
+</a>
+{% endblock extra_header %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <!-- Sidebar Section -->
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body text-center">
+                    <h3 class="card-title text-success">Current Time</h3>
+                    <p id="current-time" class="text-muted"></p>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            const timeElement = document.getElementById("current-time");
+                            function updateTime() {
+                                const now = new Date();
+                                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+                                timeElement.textContent = now.toLocaleString(undefined, options);
+                            }
+                            updateTime();
+                            setInterval(updateTime, 60000);
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Inbox Section -->
+        <div class="col-md-8">
+            <h3>Your Inbox</h3>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    {% if messages %}
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>From</th>
+                                    <th>Subject</th>
+                                    <th>Received</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for message in messages %}
+                                <tr class="{% if not message.is_read %}table-warning{% endif %}">
+                                    <td>{{ message.sender.username }}</td>
+                                    <td>{{ message.subject }}</td>
+                                    <td>{{ message.timestamp|date:"D M d, Y H:i" }}</td>
+                                    <td>
+                                        <span class="badge {% if message.is_read %}bg-success{% else %}bg-warning{% endif %}">
+                                            {% if message.is_read %}Read{% else %}Unread{% endif %}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-between">
+                                            <a href="{% url 'user_messages:detail' message.id %}" class="btn btn-sm btn-primary me-1">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                            <a href="{% url 'user_messages:conversation_history' message.sender.id %}" class="btn btn-sm btn-info me-1">
+                                                <i class="fas fa-comments"></i> Conversation
+                                            </a>
+                                            <a href="{% url 'user_messages:delete' message.id %}" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i> Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p class="text-muted text-center">No messages found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

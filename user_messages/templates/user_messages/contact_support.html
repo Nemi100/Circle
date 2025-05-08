@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h1>Contact Support</h1>
+    <p>Please fill out the form below to reach our support team.</p>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="subject" class="form-label">Subject:</label>
+            <input type="text" id="subject" name="subject" class="form-control" placeholder="Enter subject" required>
+        </div>
+        <div class="mb-3">
+            <label for="body" class="form-label">Message:</label>
+            <textarea id="body" name="body" class="form-control" placeholder="Enter your message" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send Message</button>
+    </form>
+</div>
+{% endblock %}

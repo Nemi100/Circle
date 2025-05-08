@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'jobs/css/jobs.css' %}">
+{% endblock %}
+
+{% block extra_header %}
+<div class="container text-center py-3">
+    <h1>Manage Your Jobs</h1>
+    <p>Edit or delete jobs you have posted.</p>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Edit Job</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Save Changes</button>
+        <a href="{% url 'profiles:client_job_management' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

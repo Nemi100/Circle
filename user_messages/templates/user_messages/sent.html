@@ -1,0 +1,11 @@
+<h2>Sent Messages</h2>
+<ul>
+    {% for message in messages %}
+    <li>
+        <strong>To:</strong> {{ message.recipient.username }}<br>
+        <strong>Subject:</strong> {{ message.subject }}<br>
+        <strong>Time:</strong> {{ message.timestamp|date:"D M d, Y H:i" }}<br>
+        <a href="{% url 'user_messages:detail' message.id %}" class="btn btn-sm btn-success">View Message</a>
+    </li>
+    {% endfor %}
+</ul>

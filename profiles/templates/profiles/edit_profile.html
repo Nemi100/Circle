@@ -1,21 +1,106 @@
 {% extends "base.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/profile.css' %}">
+<link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+{% endblock %}
+
+{% block extra_header %}
+<div class="container text-center py-3">
+    <h1 class="text-primary">Edit Your Profile</h1>
+    <p>Update your details to present the best version of yourself to clients!</p>
+</div>
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2>Edit Freelancer Profile(profile app)</h2>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ profile_form.as_p }}
-        {% if extra_form %}
-            <h3>Additional Details</h3>
-            {{ extra_form.as_p }}
-        {% endif %}
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-    </form>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <!-- Display Missing Fields Information -->
+                    {% if not profile.user.first_name or not profile.user.last_name %}
+                        <div class="alert alert-info" role="alert">
+                            Your profile is missing your first or last name. Adding them can help clients recognize you better!
+                        </div>
+                    {% endif %}
+
+                    <!-- Display Error Messages -->
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <h3 class="card-title">Profile Information</h3>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <!-- Profile Picture Section -->
+                        <div class="mb-4 text-center">
+                            {% if profile.user.profile_picture %}
+                                <img src="{{ profile.user.profile_picture.url }}" 
+                                     alt="{{ request.user.username }}'s Profile Picture" 
+                                     class="img-thumbnail mb-3">
+                            {% else %}
+                                <img src="{% static 'profiles/images/default_profile_picture.jpg' %}" 
+                                     alt="Default Profile Picture" 
+                                     class="img-thumbnail mb-3">
+                            {% endif %}
+                        </div>
+
+                        <!-- Main Form Fields -->
+                        <div class="form-group">
+                            {{ form|crispy }}
+                        </div>
+
+                        <!-- Portfolio Links Section -->
+                        <div class="form-group mt-4">
+                            
+                            {{ formset.management_form }}
+                            {% for inline_form in formset %}
+                                <div class="card mb-2">
+                                    <div class="card-body">
+                                        <!-- Existing Links -->
+                                        <div class="mb-3">
+                                            <label for="url-{{ forloop.counter }}" class="form-label">Link</label>
+                                            {{ inline_form.url }}
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="description-{{ forloop.counter }}" class="form-label">Description</label>
+                                            {{ inline_form.description }}
+                                        </div>
+                                        {% if inline_form.instance.pk %}
+                                            <div class="form-check mt-2">
+                                                <label class="form-check-label">
+                                                    {{ inline_form.DELETE }} Remove this link
+                                                </label>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Profile Preview Section -->
+            <div class="card shadow mt-4">
+                <div class="card-body">
+                    <h3 class="card-title">Preview Your Profile</h3>
+                    <p>Want to see what clients will see? Click the button below to view your public profile.</p>
+                    <a href="{% url 'profiles:freelancer_public_profile' username=request.user.username %}" class="btn btn-outline-info w-100">
+                        View Public Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

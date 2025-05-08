@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Our A-list Freelancers{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center text-success mb-4">Our A-list Freelancers</h1>
+    <p class="text-center text-muted">Discover skilled minds ready to bring your ideas to life.</p>
+
+    <div class="row">
+        {% for freelancer in page_obj %}
+        <div class="col-md-6 mb-4">
+            <div class="freelancer-card d-flex align-items-center">
+                {% if freelancer.profile_picture %}
+                    <img src="{{ freelancer.profile_picture.url }}" alt="{{ freelancer.username }}" class="img-fluid freelancer-card-img">
+                    {% else %}
+                    <img src="{% static 'profiles/images/default_profile_picture.png' %}" alt="Default Profile Picture" class="img-fluid freelancer-card-img">
+                {% endif %}
+                    
+                <div class="freelancer-card-body flex-grow-1">
+                    <h5 class="freelancer-card-title">{{ freelancer.username }}</h5>
+                    <p><strong>Skills:</strong>
+                        {% for skill in freelancer.freelancerprofile.skills.all %}
+                            {{ skill.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    {% if user.role == 'CLIENT' %}
+                    <a href="{% url 'user_messages:compose' %}?recipient={{ freelancer.username }}" class="btn btn-outline-primary btn-sm">Send Message</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="d-flex justify-content-center mt-4">
+        <nav aria-label="Freelancer pagination">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock %}

@@ -52,9 +52,10 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     'home',
     'profiles',
-    'dashboard',
     'subscription',
     'storages',
+    'jobs',
+    'user_messages',
 ]
 
 
@@ -116,6 +117,8 @@ LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 
 WSGI_APPLICATION = 'circle.wsgi.application'
+
+AUTH_USER_MODEL = 'profiles.User'
 
 # Database
 if 'DATABASE_URL' in os.environ:

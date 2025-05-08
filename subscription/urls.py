@@ -1,14 +1,17 @@
 from django.urls import path
-from .views import create_checkout_session, success, webhook, subscription_view, subscription_checkout, subscription_plans
-from django.views.generic import TemplateView
+from . import views
 
 app_name = 'subscription'
 
 urlpatterns = [
-    path('subscribe/', subscription_plans, name='subscribe'),
-    path('create-checkout-session/<str:price_id>/', create_checkout_session, name='create-checkout-session'),
-    path('success/<int:subscription_id>/', success, name='subscription_success'),
-    path('webhook/', webhook, name='webhook'),
-    path('subscription/', subscription_view, name='subscription_view'),
-    path('subscription-checkout/', subscription_checkout, name='subscription_checkout'),
+    path('display/', views.display_subscription_page, name='display'),  # Render subscription page
+    path('plans/', views.show_subscription_plans, name='plans'),  # Display subscription plans
+    path('subscribe/', views.redirect_to_plans, name='subscribe'),  # Redirect to subscription plans
+    path('checkout/', views.create_stripe_checkout_session, name='stripe_checkout'),  # Create Stripe Checkout session
+    path('success/', views.subscription_success, name='success'),  # Success page after payment
+    path('webhook/', views.stripe_webhook, name='webhook'),  # Webhook for Stripe events
+    path('cancel/', views.cancel_subscription, name='cancel'),
+    path('cancel/process/', views.process_cancel, name='process_cancel')
 ]
+
+

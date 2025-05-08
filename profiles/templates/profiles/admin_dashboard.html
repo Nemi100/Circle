@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+{% endblock %}
+
+{% block extra_header %}
+<div class="mb-3 p-3 text-center bg-light rounded">
+    <h1 class="text-success">Admin Dashboard</h1>
+    <p class="text-muted">Manage users, messages, reports, and other system stats.</p>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Messaging Stats -->
+        <div class="col-md-6">
+            <h3>Messaging Stats</h3>
+            <p>Total Messages: {{ total_messages }}</p>
+            <p>Unread Messages: {{ unread_messages }}</p>
+            <p>Important Messages: {{ important_messages }}</p>
+            <a href="{% url 'user_messages:admin_inbox' %}" class="btn btn-primary">View Inbox</a>
+        </div>
+
+        <!-- User Overview -->
+        <div class="col-md-6">
+            <h3>User Overview</h3>
+            <p>Total Registered Users: {{ total_users }}</p>
+            <p>Freelancers: {{ total_freelancers }}</p>
+            <p>Clients: {{ total_clients }}</p>
+            <a href="{% url 'profiles:admin_user_management' %}" class="btn btn-primary">Manage Users</a>
+        </div>
+    </div>
+
+    <!-- Conditional Section for Superusers -->
+    {% if request.user.is_superuser %}
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <h3>Admin Reports</h3>
+            <p>View detailed logs of admin activities and user growth.</p>
+            <a href="{% url 'profiles:admin_report' %}" class="btn btn-info">Admin Action Report</a>
+        </div>
+
+        <div class="col-md-6">
+            <h3>User Growth</h3>
+            <p>Track user registrations and deletions over time.</p>
+            <a href="{% url 'profiles:user_growth_report' %}" class="btn btn-info">User Growth Report</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

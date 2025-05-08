@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h1>Compose Reply</h1>
+    <p>Reply to a message from the inbox.</p>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="recipient" class="form-label">Recipient Username:</label>
+            <input type="text" id="recipient" name="recipient" class="form-control" placeholder="Enter recipient's username" required>
+        </div>
+        <div class="mb-3">
+            <label for="subject" class="form-label">Subject:</label>
+            <input type="text" id="subject" name="subject" class="form-control" placeholder="Enter subject">
+        </div>
+        <div class="mb-3">
+            <label for="body" class="form-label">Message Body:</label>
+            <textarea id="body" name="body" class="form-control" placeholder="Enter your message" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send Message</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,61 +1,86 @@
 {% extends "base.html" %}
+
 {% load static %}
 
+{% block title %}Home - Circle{% endblock %}
+
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'home/css/home_page.css' %}">
+<link rel="stylesheet" href="{% static 'home/css/home.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid p-0">
-    <div class="jumbotron">
-        
-        <div class="content-card p-4">
-            <h1 class="display-4 logo-font">Welcome to Circle</h1>
-            <p class="lead">Connecting Visionaries with Tech Wizards</p>
-            <hr class="my-4">
-            <p>Post a Job & One of Our Tech Experts Will Get In Touch Shortly.</p>
-            <div>
-                <h4>
-                    <a href="#" class="btn shop-now-button py-3 text-uppercase">Get Started</a>
-                    <a href="{% url 'dashboard:job_listings' %}" class="btn shop-now-button py-3 text-uppercase">View Job Listings</a> 
-                </h4>
-            </div>
+<!-- Hero Section -->
+<div class="jumbotron custom-hero text-light">
+    <div class="container text-center">
+        <h1 class="hero-title">Welcome to Circle</h1>
+        <p class="hero-description">Your gateway to a world of possibilities, connecting clients with top-notch freelancers.</p>
+        <a href="#" class="btn btn-primary btn-lg hero-button">Get Started</a>
+    </div>
+</div>
+
+<!-- Why Choose Us Section -->
+<div class="container py-5 bg-light rounded">
+    <div class="row text-center">
+        <div class="col-12">
+            <h1 class="text-success mb-3">Why Choose Us?</h1>
+            <p class="text-muted">*Empowering Clients and Freelancers to Succeed Together*</p>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-6">
+            <h2>For Clients</h2>
+            <p>Post jobs effortlessly and browse through profiles of top-tier freelancers. Collaborate with experts who match your vision and bring your projects to life.</p>
+        </div>
+        <div class="col-md-6">
+            <h2>For Freelancers</h2>
+            <p>Showcase your expertise and connect with clients from around the globe. Gain access to exciting opportunities and grow your career on a trusted platform.</p>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-12">
+            <h3><i>Our Features:</i></h3>
+            <ul class="list-unstyled">
+                <li>✔ Seamless job postings</li>
+                <li>✔ Advanced freelancer matching system</li>
+                <li>✔ Integrated communication tools</li>
+                <li>✔ Safe and secure payment processing</li>
+            </ul>
+            <p class="mt-4">Discover the future of collaboration, whether you're a client looking to hire or a freelancer ready to work.</p>
+            <a href="{% url 'account_signup' %}" class="btn btn-success mt-3">Join Now</a>
+        </div>
+    </div>
+</div>
 
-    <div class="container card-container">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Top Tech Wizards Board</h5>
-                        <p class="card-text">Our Top Tech Wizards are revolutionists, creating new websites/apps and supporting virtual business spaces, all while earning extra income.</p>
-                        <a href="{% url 'profiles:top_tech_wizards' %}" class="btn btn-primary"><i class="fas fa-user"></i> Learn More</a>
-                    </div>
+<!-- Features Section -->
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">View Our A-list Developers</h5>
+                    <p class="card-text">Explore profiles of top-tier experts ready to bring your ideas to life.</p>
+                    <a href="{% url 'home:learn_more' %}" class="btn btn-outline-primary">Learn More</a>
                 </div>
             </div>
-            
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">How It Works</h5>
-                        <p class="card-text">Sign up, access an interactive dashboard to post jobs and receive messages. Set your budget and provide detailed requirements.</p>
-                        <a href="#" class="btn btn-primary"><i class="fas fa-info-circle"></i>Learn More</a>
-                    </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Earn Money or Get Better Deals</h5>
+                    <p class="card-text">Join a thriving platform that fosters collaboration and success.</p>
+                    <a href="{% url 'account_signup' %}" class="btn btn-outline-primary">Sign Up Now</a>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Community</h5>
-                        <p class="card-text">Join a vibrant community of visionaries and tech experts, collaborating to bring ideas to life.</p>
-                        <a href="#" class="btn btn-primary"><i class="fas fa-users"></i>Join Now</a>
-                    </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">View Recent Job Postings</h5>
+                    <p class="card-text">Discover a variety of opportunities and find your perfect match.</p>
+                    <a href="{% url 'jobs:general_jobs_list' %}" class="btn btn-outline-primary">Browse Jobs</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
 {% endblock %}
-
-

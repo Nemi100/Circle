@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'user_messages/css/user_messages.css' %}">
+{% endblock extra_css %}
+
+{% block extra_header %}
+<div class="text-center my-4">
+    <h1 class="text-success">Message Details</h1>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb justify-content-center">
+            {% if request.user.is_staff %}
+                <li class="breadcrumb-item"><a href="{% url 'user_messages:admin_inbox' %}">Admin Inbox</a></li>
+            {% else %}
+                <li class="breadcrumb-item"><a href="{% url 'user_messages:inbox' %}">Inbox</a></li>
+            {% endif %}
+            <li class="breadcrumb-item active" aria-current="page">Message Details</li>
+        </ol>
+    </nav>
+</div>
+{% endblock extra_header %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="card">
+        <div class="card-header bg-info text-white text-center">
+            <h2>{{ message.subject }}</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>From:</strong> {{ message.sender.username }}</p>
+            <p><strong>To:</strong> {{ message.recipient.username }}</p>
+            <p><strong>Sent:</strong> {{ message.timestamp|date:"D M d, Y H:i" }}</p>
+            <hr>
+            <div class="message-body p-3 bg-light border rounded">
+                {{ message.body }}
+            </div>
+            {% if application %}
+                <div class="mt-3">
+                    {% if application.cv %}
+                        <a href="{{ application.cv.url }}" class="btn btn-outline-primary">Download CV</a>
+                    {% endif %}
+                    {% if application.linkedin_profile %}
+                        <a href="{{ application.linkedin_profile }}" class="btn btn-outline-info">LinkedIn Profile</a>
+                    {% endif %}
+                    {% if application.portfolio_link %}
+                        <a href="{{ application.portfolio_link }}" class="btn btn-outline-success">Portfolio</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="card-footer text-end">
+            {% if request.user.is_staff %}
+                <a href="{% url 'user_messages:admin_delete_message' message.id %}" class="btn btn-danger">Delete</a>
+                <a href="{% url 'user_messages:admin_inbox' %}" class="btn btn-secondary">Back to Admin Inbox</a>
+            {% else %}
+                <a href="{% url 'user_messages:inbox' %}" class="btn btn-secondary">Back to Inbox</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Reply Section -->
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5>Reply to this message</h5>
+            <form method="post" action="{% url 'user_messages:detail' message.id %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <textarea name="reply_body" class="form-control" rows="3" placeholder="Write your reply..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-success mt-2">Send Reply</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

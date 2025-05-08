@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+{% endblock %}
+
+{% block extra_header %}
+<div class="container text-center py-3">
+    <h1 class="text-success">Welcome, {{ request.user.first_name }}!</h1>
+    <p>Here's your Freelancer Dashboard—manage your profile, subscriptions, and more.</p>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <!-- Profile Completion Section -->
+    <div class="row mb-4">
+        <!-- Profile Completion Card -->
+        <div class="col-md-6">
+            <div class="card shadow h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h3 class="card-title">Profile Completion</h3>
+                    <div class="progress" style="height: 25px;">
+                        <div class="progress-bar bg-success" role="progressbar" 
+                             style="width: {{ profile_completion|default:0 }}%;" 
+                             aria-valuenow="{{ profile_completion }}" 
+                             aria-valuemin="0" aria-valuemax="100">
+                            <strong>{{ profile_completion|default:0 }}% Complete</strong>
+                        </div>
+                    </div>
+                    <p class="mt-2">
+                        {% if profile_completion < 100 %}
+                            Your profile is incomplete. Missing fields: {{ missing_fields|join:", " }}.
+                            <a href="{% url 'profiles:edit_profile' %}" class="btn btn-warning btn-sm mt-2">
+                                Complete Profile
+                            </a>
+                        {% else %}
+                            Great job! Your profile is complete and ready to shine.
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Support -->
+        <div class="col-md-6">
+            <div class="card shadow h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h3 class="card-title">Need Help?</h3>
+                    <p>Contact our support team for assistance with any issues or queries.</p>
+                    <a href="{% url 'user_messages:contact_support' %}" class="btn btn-outline-success mt-auto">Contact Support</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile and Subscription Sections -->
+    <div class="row mt-3">
+        <!-- Profile Section -->
+        <div class="col-md-6">
+            <div class="card shadow h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h3 class="card-title">
+                        {% if profile %}
+                            Update Your Profile
+                        {% else %}
+                            Create Your Profile
+                        {% endif %}
+                    </h3>
+                    <p>
+                        {% if profile %}
+                            Keep your profile up-to-date to attract the right clients!
+                        {% else %}
+                            Build your profile to showcase your skills and expertise!
+                        {% endif %}
+                    </p>
+                    <a href="{% if profile %}{% url 'profiles:edit_profile' %}{% else %}{% url 'profiles:create_profile' %}{% endif %}" 
+                       class="btn btn-outline-success mt-auto">
+                        {% if profile %}
+                            Edit Profile
+                        {% else %}
+                            Create Profile
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subscription Management Section -->
+        <div class="col-md-6">
+            <div class="card shadow h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    {% if user.has_active_subscription %}
+                        <h3 class="card-title">Your Subscription</h3>
+                        <p class="text-success">Your <strong>{{ user.current_subscription_type }}</strong> subscription is active.</p>
+                        
+                        <p class="text-muted">
+                            Renewal Date: 
+                            <strong>{% if user.get_renewal_date %}
+                                {{ user.get_renewal_date|date:"F j, Y" }}
+                            {% else %}
+                                Not available
+                            {% endif %}</strong>
+                        </p>
+        
+                        <p class="text-muted">
+                            Days Until Renewal: 
+                            <strong>{% if user.get_days_until_renewal %}
+                                {{ user.get_days_until_renewal }} days
+                            {% else %}
+                                Not available
+                            {% endif %}</strong>
+                        </p>
+        
+                        <ul class="list-group mb-3">
+                            <li class="list-group-item">Access to premium content</li>
+                            <li class="list-group-item">Priority customer support</li>
+                            <li class="list-group-item">Exclusive member discounts</li>
+                        </ul>
+        
+                        <div>
+                            {% if user.get_days_until_renewal > 0 %}
+                                <button class="btn btn-outline-info disabled">Change Plan (Available After Renewal)</button>
+                            {% else %}
+                                <a href="{% url 'subscription:plans' %}" class="btn btn-outline-info">Change Plan</a>
+                            {% endif %}
+                            <a href="{% url 'subscription:cancel' %}" class="btn btn-outline-danger">Cancel Subscription</a>
+                        </div>
+                    {% else %}
+                        <h3 class="card-title">Manage Subscription</h3>
+                        <p>Access exclusive features tailored to your needs with a subscription.</p>
+                        <a href="{% url 'subscription:plans' %}" class="btn btn-outline-success mt-auto">Subscribe</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inbox and Job Listings Section -->
+    <div class="row mt-4">
+        <!-- Inbox Section -->
+        <div class="col-md-6">
+            <div class="card shadow h-100">
+                {% include "includes/partials/inbox_card.html" %}
+            </div>
+        </div>
+
+        <!-- Job Listings -->
+        <div class="col-md-6">
+            <div class="card shadow h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h3 class="card-title">Recent Job Listings</h3>
+                    <p>Explore job opportunities posted by clients to find your next project.</p>
+                    <a href="{% url 'jobs:job_list' %}" class="btn btn-outline-success mt-auto">View Jobs</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

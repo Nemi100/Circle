@@ -1,0 +1,10 @@
+<div class="card custom-card">
+    <div class="card-body text-center">
+        <h3 class="card-title text-success">Your Inbox</h3>
+        <p class="text-muted">Stay connected with your clients or freelancers.</p>
+        <a href="{% url 'user_messages:inbox' %}" class="btn btn-success">
+            <i class="fas fa-envelope"></i> View Mails
+            <span class="badge bg-danger">{{ unread_count }}</span>
+        </a>
+    </div>
+</div>

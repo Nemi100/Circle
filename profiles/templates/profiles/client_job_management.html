@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'jobs/css/jobs.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Your Posted Jobs</h2>
+
+    {% if client_jobs %}
+        <div class="row">
+            {% for job in client_jobs %}
+            <div class="col-md-6 col-lg-4 mb-4"> 
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ job.title }}</h5>
+                        <p class="card-text">{{ job.description|truncatechars:100 }}</p>
+                        <p class="mb-1"><strong>Budget:</strong> ${{ job.budget }}</p>
+                        <p class="mb-3"><strong>Deadline:</strong> {{ job.deadline }}</p>
+                        <div class="d-grid gap-2"> <!-- Actions go below -->
+                            <a href="{% url 'jobs:edit_job' job.id %}" class="btn btn-warning btn-block">Edit</a>
+                            <form method="post" action="{% url 'jobs:delete_job' job.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-block">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center">
+            <h3>You have not posted any jobs yet.</h3>
+            <p>Start posting jobs to find the best talent for your projects!</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

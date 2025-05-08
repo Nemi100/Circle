@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+{% endblock %}
+
+{% block extra_header %}
+<div class="mb-3 p-3 text-center bg-light rounded">
+    <h1 class="text-success">Admin Management</h1>
+    <p class="text-muted">Create a new admin account.</p>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Create New Admin</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" class="form-control" placeholder="Enter username" required>
+        </div>
+        <div class="form-group mt-3">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" class="form-control" placeholder="Enter email address" required>
+        </div>
+        <div class="form-group mt-3">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" class="form-control" placeholder="Enter password" required>
+        </div>
+        <button type="submit" class="btn btn-success mt-3">Create Admin</button>
+        <a href="{% url 'profiles:admin_user_management' %}" class="btn btn-secondary mt-3">Back to User Management</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,6 +1,12 @@
 from django.shortcuts import render
-from dashboard.models import Job
+
+# Create your views here.
 
 def index(request):
-    jobs = Job.objects.all()  
-    return render(request, 'home/index.html', {'jobs': jobs})  
+    """ A view to return the index page """
+    
+    return render(request, 'home/index.html')
+
+
+def learn_more(request):
+    return render(request, 'home/learn_more.html')

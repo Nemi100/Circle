@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+{% endblock %}
+
+{% block extra_header %}
+<div class="container text-center py-3">
+    <h1 class="text-success">Welcome, {{ request.user.username }}!</h1>
+    {% if client_profile %}
+        <p>Your profile is {{ profile_completion }}% complete.</p>
+        {% if profile_completion < 100 %}
+            <p class="text-warning">
+                Missing fields: {{ client_profile.missing_fields|join:", " }}.
+                <a href="{% url 'profiles:update_client_profile' %}" class="btn btn-warning btn-sm">Complete Profile</a>
+            </p>
+        {% endif %}
+    {% else %}
+        <p class="text-warning">
+            You don't have a profile yet. Create one to get started.
+            <a href="{% url 'profiles:create_client_profile' %}" class="btn btn-success btn-sm">Create Profile</a>
+        </p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <!-- Overview Card -->
+        <div class="col-md-6">
+            <div class="card shadow h-100 d-flex flex-column">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h3 class="card-title text-success">Your Dashboard Overview</h3>
+                    <p>You currently have <strong>{{ user_jobs|default:0 }}</strong> job postings.</p>
+                    <p>Freelancers applied to <strong>{{ jobs_with_applications|default:0 }}</strong> of your postings.</p>
+                    <a href="{% url 'profiles:client_job_management' %}" class="btn btn-outline-success mt-auto">Manage Jobs</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Support Section -->
+        <div class="col-md-6">
+            <div class="card shadow h-100 d-flex flex-column">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h3 class="card-title text-success">Need Help?</h3>
+                    <p>Contact our support team for assistance with managing job postings, connecting with freelancers, or resolving issues.</p>
+                    <a href="{% url 'user_messages:contact_support' %}" class="btn btn-outline-success mt-auto">Contact Support</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <!-- Post a Job Section -->
+        <div class="col-md-6">
+            <div class="card shadow h-100 d-flex flex-column">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h3 class="card-title">Post a Job</h3>
+                    <p>Have a project in mind? Share the details to find the perfect freelancer for the job.</p>
+                    <a href="{% url 'jobs:create_job' %}" class="btn btn-outline-success mt-auto">Post Job</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Freelancer Search Section -->
+        <div class="col-md-6">
+            <div class="card shadow h-100 d-flex flex-column">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h3 class="card-title">Search for Freelancers</h3>
+                    <p>Use categories and filters to find freelancers that match your requirements.</p>
+                    <a href="{% url 'profiles:search_freelancers' %}" class="btn btn-outline-success mt-auto">Find Freelancers</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- Inbox Section -->
+        <div class="col-md-6">
+            <div class="card shadow h-100">
+                {% include "includes/partials/inbox_card.html" %}
+            </div>
+        </div>
+
+        <!-- Additional Section -->
+        <div class="col-md-6">
+            <div class="card shadow h-100 d-flex flex-column">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h3 class="card-title">Additional Section</h3>
+                    <p>Add your content here...</p>
+                    <a href="#" class="btn btn-outline-success mt-auto">Action</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

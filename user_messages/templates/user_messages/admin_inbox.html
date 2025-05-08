@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_header %}
+<div class="mb-4 p-4 bg-light rounded shadow-sm">
+    <h1 class="text-center text-success">Admin Inbox</h1>
+    <p class="text-center text-muted">Manage communications effortlessly with a clean and focused interface.</p>
+</div>
+{% endblock extra_header %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <!-- Main Content: Messages Section (8 columns) -->
+        <div class="col-md-8">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">Messages</h3>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Sender</th>
+                                    <th>Subject</th>
+                                    <th>Received</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for message in messages %}
+                                <tr class="{% if not message.is_read %}table-warning{% endif %}">
+                                    <td>{{ message.sender.username }}</td>
+                                    <td>{{ message.subject }}</td>
+                                    <td>{{ message.timestamp|date:"D M d, Y H:i" }}</td>
+                                    <td>
+                                        <a href="{% url 'user_messages:admin_message_detail' message.id %}" class="btn btn-info btn-sm">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                        <a href="{% url 'user_messages:conversation_history' message.sender.id %}" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-comments"></i> Conversation
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p class="text-muted text-center">No messages available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar: Updates Section (4 columns) -->
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="card-title text-success">Quick Stats</h4>
+                    <p><strong>Total Messages:</strong> {{ client_messages_count }} from Clients, {{ freelancer_messages_count }} from Freelancers</p>
+                    <p><strong>Unread Messages:</strong> {{ unread_client_messages_count }} from Clients, {{ unread_freelancer_messages_count }} from Freelancers</p>
+                </div>
+            </div>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title text-success">Notifications</h4>
+                    <ul class="list-unstyled">
+                        <li>🔔 Maintenance Scheduled: Apr 15, 2025</li>
+                        <li>📢 Feature Update: Bulk Pinning Available</li>
+                        <li>🗓 Recent Activity: New messages from Sarah</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

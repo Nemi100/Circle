@@ -1,14 +1,59 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/profile.css' %}">
+<link rel="stylesheet" href="{% static 'subscription/css/subscribe.css' %}">
 {% endblock %}
 
-{% block extra_title %} - Checkout Canceled{% endblock %}
+{% block extra_header %}
+<div class="container text-center py-3">
+    <h1 class="text-danger">Cancel Your Subscription</h1>
+    <p class="text-muted">We're sad to see you go! Manage your subscription below.</p>
+</div>
+{% endblock %}
 
 {% block content %}
-<section>
-    <p>Picked the wrong subscription? Shop around then come back to pay!</p>
-</section>
+<div class="container mt-5">
+    <!-- Cancellation Confirmation Section -->
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h3 class="card-title text-center text-danger">Confirm Cancellation</h3>
+                    <p class="text-center text-muted">
+                        Are you sure you want to cancel your <strong>{{ user.current_subscription_type }}</strong> subscription? 
+                        Canceling will remove access to exclusive features, premium support, and discounts.
+                    </p>
+                    <form method="POST" action="{% url 'subscription:process_cancel' %}">
+                        {% csrf_token %}
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-danger me-2">Yes, Cancel Subscription</button>
+                            <a href="{% url 'subscription:plans' %}" class="btn btn-outline-secondary">Keep My Subscription</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Benefits Section -->
+    <div class="row mt-5">
+        <div class="col-md-10 offset-md-1">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="card-title text-success">Why Stay Subscribed?</h3>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Access to exclusive premium features</li>
+                        <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Priority support for your projects</li>
+                        <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Member-only discounts and perks</li>
+                        <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Continual updates and new tools</li>
+                    </ul>
+                    <p class="text-center mt-4">
+                        <a href="{% url 'subscription:plans' %}" class="btn btn-outline-success">Explore More Plans</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

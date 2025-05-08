@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'user_messages/css/user_messages.css' %}">
+<style>
+    .message-history .sender-message {
+        background-color: #e9f7ef; /* Light green for the user's messages */
+        color: #155724; /* Dark green for contrast */
+        text-align: right;
+    }
+    .message-history .receiver-message {
+        background-color: #d1ecf1; /* Light blue for received messages */
+        color: #0c5460; /* Dark blue for contrast */
+        text-align: left;
+    }
+</style>
+{% endblock extra_css %}
+
+{% block title %}Conversation History{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <h1 class="text-center">
+        Conversation History with {{ user.username }}
+        {% if is_admin %}
+            <span class="badge bg-primary">Admin View</span>
+        {% else %}
+            <span class="badge bg-secondary">User View</span>
+        {% endif %}
+    </h1>
+
+    <div class="card shadow-sm message-history mt-4">
+        <div class="card-body">
+            {% if conversation %}
+                {% for message in conversation %}
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <div class="p-3 rounded {% if message.sender == request.user %}sender-message{% else %}receiver-message{% endif %}">
+                                <strong>{{ message.sender.username }}</strong>
+                                <small class="text-muted float-end">{{ message.timestamp|date:"D M d, Y H:i" }}</small>
+                                <p class="mt-2">{{ message.body }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-muted">No messages found in this conversation.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="text-end mt-3">
+        <!-- Role-based navigation -->
+        {% if is_admin %}
+            <a href="{% url 'user_messages:admin_inbox' %}" class="btn btn-secondary">Back to Admin Inbox</a>
+        {% else %}
+            <a href="{% url 'user_messages:inbox' %}" class="btn btn-secondary">Back to User Inbox</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

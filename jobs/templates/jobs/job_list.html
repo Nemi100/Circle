@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchButton = document.getElementById("searchButton");
+        const categoryFilter = document.getElementById("categoryFilter");
+
+        // Clear query parameters on page reload
+        if (window.location.search) {
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        // Set dropdown to default value ("All Skills")
+        categoryFilter.value = "all";
+
+        // Trigger form submission when the search button is clicked
+        searchButton.addEventListener("click", function () {
+            categoryFilter.form.submit();
+        });
+    });
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'jobs/css/jobs.css' %}">
+{% endblock %}
+
+{% block extra_header %}
+<div class="container text-center py-3">
+    <h1 class="text-success">Discover Opportunities</h1>
+    <p>Find projects suited to your skills and expertise.</p>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Motivational Card -->
+        <div class="col-md-6 order-1 order-md-2">
+            <div class="card h-100 shadow">
+                <div class="card-body d-flex flex-column justify-content-center text-center">
+                    <h3 class="text-success mb-4">Your Next Opportunity Awaits</h3>
+                    <p class="card-text text-muted">
+                        Freelancing gives you the flexibility to shape your career on your own terms.
+                        Discover exciting projects, showcase your skills, and build strong partnerships with clients worldwide.
+                    </p>
+                    <p class="font-italic text-muted">"Success is just one project away."</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filter Card -->
+        <div class="col-md-6 order-2 order-md-1">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title">Search for Jobs</h3>
+                    <form id="jobFilterForm" method="GET" action="{% url 'jobs:job_list' %}">
+                        <div class="form-group mb-3">
+                            <label for="categoryFilter" class="form-label">Filter by Category</label>
+                            <select id="categoryFilter" name="search_term" class="form-select">
+                                <option value="all" {% if search_term == "all" or not search_term %}selected{% endif %}>All Skills</option>
+                                {% for skill in skills %}
+                                    <option value="{{ skill.name }}" {% if search_term == skill.name %}selected{% endif %}>{{ skill.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Search</button>
+                    </form>
+                    <p id="errorMessage" class="text-danger mt-3" style="display: none;">
+                        Sorry, no jobs are available in the selected category.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Job Cards Section -->
+    <div class="row mt-4" id="jobCardsContainer">
+        {% for job in jobs %}
+        <div class="col-md-4 mb-4 job-item" data-category="{{ job.skills_required.all|join:", " |lower }}">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ job.title }}</h5>
+                    <p class="card-text">{{ job.description|truncatewords:20 }}</p>
+                    <p><strong>Skills:</strong> {{ job.skills_required.all|join:", " }}</p>
+                    <p><strong>Budget:</strong> ${{ job.budget }}</p>
+                    <p><strong>Deadline:</strong> {{ job.deadline }}</p>
+                </div>
+                <div class="card-footer bg-transparent">
+                    {% if job.has_applied %}
+                    <button class="btn btn-secondary w-100" disabled>Applied</button>
+                    {% else %}
+                    <a href="{% url 'jobs:apply_for_job' job.id %}" class="btn btn-success w-100">Apply Now</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-md-12">
+            <p class="text-muted text-center">No jobs have been posted yet.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

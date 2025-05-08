@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'profiles/css/create_profile.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h1>{{ profile.user.username }}'s Profile</h1>
+    <p><strong>Bio:</strong> {{ profile.bio }}</p>
+    <p><strong>Skills:</strong> 
+        {% for skill in profile.skills.all %}
+            {{ skill.name }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+    </p>
+    <a href="{% url 'profiles:freelancer_dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+<div class="card shadow">
+    <div class="card-body text-center">
+        <h3 class="card-title text-success">
+            {% if user_role == 'CLIENT' %} Your Inbox {% elif user_role == 'FREELANCER' %} Project Messages {% endif %}
+        </h3>
+        <p class="text-muted">
+            {% if user_role == 'CLIENT' %}
+                Stay connected with your clients or freelancers.
+            {% elif user_role == 'FREELANCER' %}
+                Stay updated on your ongoing projects with clients.
+            {% endif %}
+        </p>
+        <a href="{% url 'user_messages:inbox' %}" class="btn btn-success">
+            <i class="fas fa-envelope"></i> View Mails
+            <span class="badge bg-danger">{{ unread_count }}</span>
+        </a>
+    </div>
+</div>

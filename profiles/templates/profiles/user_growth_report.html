@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h1>User Growth Report</h1>
+    <p><strong>Total Registrations:</strong> {{ registrations }}</p>
+    <p><strong>Total Deletions:</strong> {{ deletions }}</p>
+    <p><strong>Net Growth:</strong> {{ net_growth }}</p>
+</div>
+{% endblock %}

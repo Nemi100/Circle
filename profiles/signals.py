@@ -1,26 +1,17 @@
-import logging
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.contrib.auth.models import User
-from .models import FreelancerProfile, EmployerProfile
+from django.conf import settings
+from django.apps import apps 
 
-logger = logging.getLogger(__name__)
-
-@receiver(post_save, sender=User)
-def create_or_update_user_profile(sender, instance, created, **kwargs):
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def ensure_profile_exists(sender, instance, created, **kwargs):
     if created:
-        if instance.is_staff:
-            EmployerProfile.objects.create(user=instance)
-        else:
-            FreelancerProfile.objects.create(user=instance)
-        send_confirmation_email(instance)
-        logger.debug(f"Confirmation email sent to: {instance.email}")
-    else:
-        if hasattr(instance, 'freelancerprofile'):
-            instance.freelancerprofile.save()
-        elif hasattr(instance, 'employerprofile'):
-            instance.employerprofile.save()
+        # Dynamically load models to avoid circular imports
+        FreelancerProfile = apps.get_model('profiles', 'FreelancerProfile')
+        ClientProfile = apps.get_model('profiles', 'ClientProfile')
 
-def send_confirmation_email(user):
-    logger.debug(f"Sending confirmation email to {user.email}")
-    print(f"Sending confirmation email to {user.email}")
+        # Check role and create the corresponding profile
+        if instance.role == 'FREELANCER':  # Role for Freelancers
+            FreelancerProfile.objects.get_or_create(user=instance)
+        elif instance.role == 'CLIENT':  # Role for Clients
+            ClientProfile.objects.get_or_create(user=instance)

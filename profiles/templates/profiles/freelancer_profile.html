@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'profiles/css/profiles.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-3">
+    <h1 class="text-center">Freelancer Profile</h1>
+    <div class="row">
+        <!-- Profile Picture -->
+        <div class="col-md-4 text-center">
+            {% if profile.profile_picture %}
+                <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="profile-img">
+            {% else %}
+                <img src="{% static 'default_profile.png' %}" alt="Default Profile Picture" class="profile-img">
+            {% endif %}
+        </div>
+        <!-- Profile Details -->
+        <div class="col-md-8">
+            <h3>{{ profile.user.username }}</h3>
+
+            <!-- Bio -->
+            <p><strong>Bio:</strong> {{ profile.bio }}</p>
+
+            <!-- Skills -->
+            <p><strong>Skills:</strong></p>
+            {% for category in profile.skills.values('category__name').distinct %}
+                <h4>{{ category.category__name }}</h4>
+                <ul>
+                    {% for skill in profile.skills.filter(category__name=category.category__name) %}
+                        <li>{{ skill.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}>
+
+            <!-- Portfolio -->
+            <p><strong>Portfolio:</strong> 
+                {% if profile.portfolio_link %}
+                    <a href="{{ profile.portfolio_link }}" target="_blank">View Portfolio</a>
+                {% else %}
+                    <span>No portfolio available</span>
+                {% endif %}
+            </p>
+
+            <!-- Edit Profile Button -->
+            <a href="{% url 'profiles:update_user_profile' profile.user.username %}" class="btn btn-outline-success">Edit Profile</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

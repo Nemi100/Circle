@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'profiles/css/create_profile.css' %}">
+{% endblock %}
+
+{% block extra_header %}
+<div class="container text-center py-3">
+    <h1 class="text-primary">Create Your Profile</h1>
+    <p>Start building your profile to showcase your skills and expertise to potential clients!</p>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="card-title">Profile Details</h3>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="profile_picture" class="form-label">Profile Picture</label>
+                            {{ form.profile_picture }}
+                        </div>
+
+                        <!--name-->
+                        <div class="mb-3">
+                            <label for="first_name" class="form-label">First Name</label>
+                            {{ form.first_name }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="last_name" class="form-label">Last Name</label>
+                            {{ form.last_name }}
+                        </div>
+                        
+                        <!-- Bio -->
+                        <div class="mb-3">
+                            <label for="bio" class="form-label">Bio</label>
+                            {{ form.bio }}
+                        </div>
+
+                        <!-- Skills -->
+                        <div class="mb-3">
+                            <label for="skills" class="form-label">Skills</label>
+                            {% for category in skill_categories %}
+                                <strong>{{ category.name }}</strong>
+                                <ul>
+                                    {% for skill in category.skills.all %}
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="skills" value="{{ skill.id }}" {% if skill in form.initial.skills.all %}checked{% endif %}>
+                                                {{ skill.name }}
+                                            </label>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Portfolio Link -->
+                        <div class="mb-3">
+                            <label for="portfolio_link" class="form-label">Portfolio Link</label>
+                            {{ form.portfolio_link }}
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">Save Profile</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
